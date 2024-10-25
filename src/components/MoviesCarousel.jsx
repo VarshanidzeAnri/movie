@@ -23,10 +23,10 @@ function MoviesCarousel({data, sectionTitle, link, bgImg}) {
                     spaceBetween={50}
                     breakpoints={{
                         0: {
-                        slidesPerView: 3,
+                            slidesPerView: 3,
                         },
                         1024: {
-                        slidesPerView: 4,
+                            slidesPerView: 4,
                         },
                         1440: {
                             slidesPerView: 6
@@ -39,7 +39,7 @@ function MoviesCarousel({data, sectionTitle, link, bgImg}) {
         >
                     {data.map(movie => (
                     <SwiperSlide key={movie.id}>
-                    <img src={movie.image} className='w-full h-[20vh] md:h-[30vh] object-cover' />
+                    <img src={movie.image} className='w-full h-[20vh] md:h-[30vh] object-cover rounded-lg' />
                     <div className='ml-1'>
                         <div className='text-xl'>{movie.name}</div>
                         <div>{movie.name_en}</div>

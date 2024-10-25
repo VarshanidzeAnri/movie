@@ -11,7 +11,7 @@ function Header() {
   let [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { pathname } = useResolvedPath()
   return (
-    <header className="flex justify-center bg-black fixed top-0 w-full z-50 ">
+    <header className="flex justify-center bg-black fixed top-0 w-full z-50">
 
       <div className="flex justify-between items-center w-[80%] mx-auto py-5">
         <Link to='/'>logo</Link>

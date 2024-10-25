@@ -1,0 +1,15 @@
+.single-movie-item-ddss{
+    width: calc(30% - 5px);   
+}
+
+@media (min-width: 768px) {
+    .single-movie-item-ddss{
+        width: calc(25% - 20px);   
+    }
+}
+
+@media (min-width: 1024px) {
+    .single-movie-item-ddss{
+        width: calc(15% - 5px);   
+    }
+}

@@ -7,11 +7,9 @@ function Dashboard() {
     return (
         <div  className="mb-20">
             <div>
-
-            <HeaderCarousel />
+                <HeaderCarousel />
             </div>
             <div className="mt-6">
-                
                 <MoviesCarousel data={MOVIES} sectionTitle='ფილმები' link='/movies' />
                 <MoviesCarousel data={MOVIES} sectionTitle='სერიალები' link='/serials' />
                 <MoviesCarousel data={MOVIES} sectionTitle='მულტფილმები' link='/movies' />

@@ -293,6 +293,48 @@ const MOVIES = [
         ]
 
     },
+    {
+        'id': 7,
+        'name': 'test',
+        'name_en': 'test en',
+        'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqGK3diR3Zi-mnOXEaj-3ewmFyRYVxGzVzZw&s',
+        'director': 'director',
+        'description': 'movie1',
+        'year': 2024,
+        'genre': [
+            {
+                'id': 1,
+                'name': 'genre1',
+            },
+            {
+                'id': 2,
+                'name': 'genre2',
+            },
+            {
+                'id': 3,
+                'name': 'genre3',
+            },
+        ],
+        'actors': [
+            {
+                'id': 1,
+                'name': 'actor1',
+            },
+            {
+                'id': 2,
+                'name': 'actor2',
+            },
+            {
+                'id': 3,
+                'name': 'actor3',
+            },
+            {
+                'id': 4,
+                'name': 'actor4',
+            },
+        ]
+
+    },
 ]
 
 const GENRES = [
@@ -336,6 +378,7 @@ const GENRES = [
         'id': 10,
         'name': 'genre10',
     },
+    
 ]
 
 

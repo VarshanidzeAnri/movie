@@ -21,8 +21,11 @@ function Header() {
           <Link to='/serials' className={`p-3 rounded-xl ${pathname === '/serials' && 'bg-zinc-800'}`}>სერიალები</Link>
           <Link to='animes' className={`p-3 rounded-xl ${pathname === '/animes' && 'bg-zinc-800'}`}>ანიმეები</Link>
         </div>
-        <div className="hidden md:flex gap-5">
-          <div className="text-2xl"><HiMagnifyingGlass /></div>
+        <div className="hidden md:flex items-center justify-end gap-5 w-32">
+          <div className="text-2xl flex justify-start">
+            <input className="w-[10vw] bg-stone-300 text-black px-2 outline-none rounded-l-xl" />
+            <button className="bg-stone-300 text-black rounded-r-xl px-2"><HiMagnifyingGlass /></button>
+          </div>
           <Link to='login' className="text-2xl"><HiOutlineUserCircle /></Link>
         </div>
 
@@ -44,7 +47,6 @@ function Header() {
                   <Link to='animes' onClick={() => setIsSidebarOpen(false)}>ანიმაციები</Link>
                 </div>
                 <div className="flex flex-col gap-5 mt-10">
-                  
                   <Link to='/login' onClick={() => setIsSidebarOpen(false)}>პროფილი</Link>
                 </div>
               </div>

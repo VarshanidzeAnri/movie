@@ -8,6 +8,7 @@ import 'swiper/css/scrollbar';
 import { MOVIES } from '../../data';
 import 'swiper/css/autoplay';
 import './changeSwiper.css'
+import { Link } from 'react-router-dom';
 
 function HeaderCarousel() {
     return (
@@ -29,7 +30,7 @@ function HeaderCarousel() {
         {MOVIES.map(movie => (
         <SwiperSlide key={movie.id}>
           <div className='relative'>
-            <img src={movie.image} className='w-full h-[30vh] sm:h-[70vh] object-cover rounded-lg' />
+            <Link to={`/${movie.slug}`}><img src={movie.image} className='w-full h-[30vh] sm:h-[70vh] object-cover rounded-lg' /></Link>
             <div className='absolute bottom-[10%] left-[50%] -translate-x-[50%] flex flex-col  items-center text-white'>
               <div className='text-3xl'>{movie.name}</div>
               <div className='text-xl'>{movie.name_en}</div>

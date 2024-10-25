@@ -5,6 +5,7 @@ import Serials from "./views/Serials";
 import Animes from "./views/Animes";
 import NotFound from "./views/NotFound";
 import Layout from "./Layout/Layout";
+import MovieDetail from "./views/MovieDetail";
 
 const router = createBrowserRouter([
     {
@@ -28,8 +29,8 @@ const router = createBrowserRouter([
                 element: <Animes />
             },
             {
-                path: '/:id',
-                element: <Animes />
+                path: '/:slug',
+                element: <MovieDetail />
             },
         ]
     },

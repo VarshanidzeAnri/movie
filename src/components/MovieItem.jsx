@@ -1,10 +1,11 @@
+import { Link } from 'react-router-dom'
 import './movieItem.css'
 
 function MovieItem({movie}) {
     return (
         <div key={movie.id} className="single-movie-item-ddss">
                             <div className='relative'>
-                            <img src={movie.image} className='w-full h-[20vh] sm:h-[30vh] object-cover rounded-lg' />
+                            <Link to={`/${movie.slug}`}><img src={movie.image} className='w-full h-[20vh] sm:h-[30vh] object-cover rounded-lg' /></Link>
                             <div className='absolute bottom-0 w-full bg-zinc-800 opacity-80 rounded-b-lg text-white'>
                                 <div className='flex justify-between text-xs lg:text-xl lg:w-[90%] mx-auto '>
                                     <div>GEO</div>

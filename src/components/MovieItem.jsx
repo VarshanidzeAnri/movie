@@ -1,6 +1,6 @@
-import './singleMovie.css'
+import './movieItem.css'
 
-function SingleMovie({movie}) {
+function MovieItem({movie}) {
     return (
         <div key={movie.id} className="single-movie-item-ddss">
                             <div className='relative'>
@@ -21,7 +21,7 @@ function SingleMovie({movie}) {
     )
 }
 
-export default SingleMovie
+export default MovieItem
 
 
 

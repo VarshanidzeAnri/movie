@@ -15,7 +15,7 @@ import { MOVIES } from '../../data';
 
 function HeaderCarousel() {
     return (
-      <div className='w-[80vw] mx-auto'>
+      <div className='w-[90vw] md:w-[70vw] mx-auto'>
       <Swiper
       // install Swiper modules
       modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -31,7 +31,7 @@ function HeaderCarousel() {
 
       
       <SwiperSlide key={movie.id}>
-        <img src={movie.image} className='w-full h-[70vh]' />
+        <img src={movie.image} className='w-full h-[30vh] md:h-[70vh] object-cover' />
       </SwiperSlide>
       ))}
 

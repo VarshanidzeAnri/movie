@@ -15,7 +15,7 @@ import { MOVIES } from '../../data';
 
 function HeaderCarousel() {
     return (
-      <div className='w-[90vw] md:w-[70vw] mx-auto'>
+      <div className='w-full md:w-[70vw] mx-auto'>
       <Swiper
       // install Swiper modules
       modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -23,7 +23,8 @@ function HeaderCarousel() {
       slidesPerView={1}
       navigation
       pagination={{ clickable: true }}
-      
+      autoplay
+      time
       onSwiper={(swiper) => console.log(swiper)}
       loop
     >

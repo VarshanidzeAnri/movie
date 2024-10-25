@@ -11,9 +11,9 @@ function Header() {
   let [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { pathname } = useResolvedPath()
   return (
-    <header className="flex justify-center bg-black fixed top-0 z-50  w-full">
+    <header className="flex justify-center bg-black fixed top-0 w-full z-50 ">
 
-      <div className="flex justify-between items-center w-[80%] mx-auto py-5 border-white ">
+      <div className="flex justify-between items-center w-[80%] mx-auto py-5">
         <Link to='/'>logo</Link>
         <div className="hidden md:flex min-w-[25vw] justify-around border-gray-700 border-2 py-5 px-2 rounded-2xl bg-zinc-950">
           <Link to='/' className={`p-3 rounded-xl ${pathname === '/' && 'bg-zinc-800'}`}>მთავარი</Link>
@@ -31,7 +31,7 @@ function Header() {
             <HiBars3 />
           </div>
           {isSidebarOpen && (
-            <div className="absolute left-0 top-15 w-[100vw] h-[100vh] z-50">
+            <div className="absolute left-0 top-15 w-[100vw] h-[100vh] z-50 bg-black">
               <div className="flex flex-col  gap-5 mt-10 ml-5">
                 <div className="flex flex-col gap-5">
                   <Link to='/' onClick={() => setIsSidebarOpen(false)}>მთავარი</Link>

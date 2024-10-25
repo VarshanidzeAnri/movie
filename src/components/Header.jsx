@@ -33,6 +33,10 @@ function Header() {
           {isSidebarOpen && (
             <div className="absolute left-0 top-15 w-[100vw] h-[100vh] z-50 bg-black">
               <div className="flex flex-col  gap-5 mt-10 ml-5">
+              <div className="flex justify-start  ">
+                    <input className="bg-stone-500 w-[70vw] p-2 outline-none rounded-l-xl" />
+                    <button className="bg-stone-500 p-2 rounded-r-xl"><HiMagnifyingGlass /></button>
+                  </div>
                 <div className="flex flex-col gap-5">
                   <Link to='/' onClick={() => setIsSidebarOpen(false)}>მთავარი</Link>
                   <Link to='/movies' onClick={() => setIsSidebarOpen(false)}>ფილმები</Link>
@@ -40,7 +44,7 @@ function Header() {
                   <Link to='animes' onClick={() => setIsSidebarOpen(false)}>ანიმაციები</Link>
                 </div>
                 <div className="flex flex-col gap-5 mt-10">
-                  <div>search</div>
+                  
                   <Link to='/login' onClick={() => setIsSidebarOpen(false)}>პროფილი</Link>
                 </div>
               </div>

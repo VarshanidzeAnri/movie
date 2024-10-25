@@ -28,7 +28,13 @@ function HeaderCarousel() {
       >
         {MOVIES.map(movie => (
         <SwiperSlide key={movie.id}>
-          <img src={movie.image} className='w-full h-[30vh] sm:h-[70vh] object-cover rounded-lg' />
+          <div className='relative'>
+            <img src={movie.image} className='w-full h-[30vh] sm:h-[70vh] object-cover rounded-lg' />
+            <div className='absolute bottom-[10%] left-[50%] -translate-x-[50%] flex flex-col  items-center text-white'>
+              <div className='text-3xl'>{movie.name}</div>
+              <div className='text-xl'>{movie.name_en}</div>
+            </div>
+          </div>
         </SwiperSlide>
         ))}
 

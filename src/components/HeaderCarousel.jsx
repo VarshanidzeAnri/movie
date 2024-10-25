@@ -1,23 +1,42 @@
-import { Carousel } from "react-responsive-carousel"
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+// import Swiper core and required modules
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { MOVIES } from '../../data';
 
 
 
 
 function HeaderCarousel() {
     return (
-      <div className="w-[70vw] mx-auto z-10">
-        <Carousel showThumbs={false} showStatus={false}  interval={3000} infiniteLoop stopOnHover >
-      <div className="w-[70vw]">
-          <img src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg" className="w-[100%] object-fill" />
-          <p className="legend">Legend 1</p>
-      </div>
-      <div className="w-[70vw]">
-          <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_640.jpg" className="w-[100%] object-fill" />
-          <p className="legend">Legend 2</p>
-      </div>
-  </Carousel>
-      </div>
+      <div className='w-[80vw] mx-auto'>
+      <Swiper
+      // install Swiper modules
+      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      spaceBetween={50}
+      slidesPerView={1}
+      navigation
+      pagination={{ clickable: true }}
+      
+      onSwiper={(swiper) => console.log(swiper)}
+      loop
+    >
+      {MOVIES.map(movie => (
+
+      
+      <SwiperSlide key={movie.id}>
+        <img src={movie.image} className='w-full h-[70vh]' />
+      </SwiperSlide>
+      ))}
+
+    </Swiper>
+    </div>
     )
 }
 

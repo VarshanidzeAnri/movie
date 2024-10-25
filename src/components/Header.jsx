@@ -11,9 +11,9 @@ function Header() {
     let [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const {pathname} = useResolvedPath()
         return (
-        <div className="flex justify-center bg-black z-50">
+        <div className="flex justify-center bg-black">
 
-        <div className="flex justify-between items-center w-[80vw] mx-auto py-10  border-white fixed ">
+        <div className="flex justify-between items-center w-[80vw] mx-auto py-10  border-white fixed top-0 z-50 ">
             <Link to='/'>logo</Link>
             <div className="hidden md:flex min-w-[25vw] justify-around border-gray-700 border-2 py-5 px-2 rounded-2xl bg-zinc-950">
                 <Link to='/' className={`p-3 rounded-xl ${pathname === '/' && 'bg-zinc-800'}`}>მთავარი</Link>

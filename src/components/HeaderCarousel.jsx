@@ -28,7 +28,7 @@ function HeaderCarousel() {
       >
         {MOVIES.map(movie => (
         <SwiperSlide key={movie.id}>
-          <img src={movie.image} className='w-full h-[30vh] md:h-[70vh] object-cover rounded-lg' />
+          <img src={movie.image} className='w-full h-[30vh] sm:h-[70vh] object-cover rounded-lg' />
         </SwiperSlide>
         ))}
 

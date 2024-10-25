@@ -25,6 +25,8 @@ function HeaderCarousel() {
           disableOnInteraction: false,
         }}  
         loop={true}
+        
+
       >
         {MOVIES.map(movie => (
         <SwiperSlide key={movie.id}>

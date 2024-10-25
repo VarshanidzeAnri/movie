@@ -1,5 +1,5 @@
 .swiper-button-prev, .swiper-button-next{
-    color: white; 
+    color: white;
 }
 
 .swiper-pagination-bullet{
@@ -9,4 +9,8 @@
 
 .swiper-pagination-bullet-active{
     background-color: white;
+}
+
+.movieList .swiper-button-prev, .movieList .swiper-button-next{
+    --swiper-navigation-size: 15px;
 }

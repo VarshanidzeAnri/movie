@@ -87,7 +87,7 @@ const MOVIES = [
         'id': 3,
         'name': 'test 3',
         'name_en': 'test en 3',
-        'image': 'https://i0.wp.com/picjumbo.com/wp-content/uploads/amazing-stone-path-in-forest-free-image.jpg?w=600&quality=80',
+        'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s',
         'director': 'director',
         'description': 'movie1',
         'year': 2024,
@@ -129,7 +129,7 @@ const MOVIES = [
         'id': 4,
         'name': 'test',
         'name_en': 'test en',
-        'image': 'https://i0.wp.com/picjumbo.com/wp-content/uploads/amazing-stone-path-in-forest-free-image.jpg?w=600&quality=80',
+        'image': 'https://th.bing.com/th/id/OIG2.9O4YqGf98tiYzjKDvg7L',
         'director': 'director',
         'description': 'movie1',
         'year': 2024,
@@ -209,7 +209,90 @@ const MOVIES = [
         ]
 
     },
+    {
+        'id': 6,
+        'name': 'test',
+        'name_en': 'test en',
+        'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPaG-hKNIgvedxbVF_ap-S4oOkXcNGMhagKQ&s',
+        'director': 'director',
+        'description': 'movie1',
+        'year': 2024,
+        'genre': [
+            {
+                'id': 1,
+                'name': 'genre1',
+            },
+            {
+                'id': 2,
+                'name': 'genre2',
+            },
+            {
+                'id': 3,
+                'name': 'genre3',
+            },
+        ],
+        'actors': [
+            {
+                'id': 1,
+                'name': 'actor1',
+            },
+            {
+                'id': 2,
+                'name': 'actor2',
+            },
+            {
+                'id': 3,
+                'name': 'actor3',
+            },
+            {
+                'id': 4,
+                'name': 'actor4',
+            },
+        ]
 
+    },
+    {
+        'id': 7,
+        'name': 'test',
+        'name_en': 'test en',
+        'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqGK3diR3Zi-mnOXEaj-3ewmFyRYVxGzVzZw&s',
+        'director': 'director',
+        'description': 'movie1',
+        'year': 2024,
+        'genre': [
+            {
+                'id': 1,
+                'name': 'genre1',
+            },
+            {
+                'id': 2,
+                'name': 'genre2',
+            },
+            {
+                'id': 3,
+                'name': 'genre3',
+            },
+        ],
+        'actors': [
+            {
+                'id': 1,
+                'name': 'actor1',
+            },
+            {
+                'id': 2,
+                'name': 'actor2',
+            },
+            {
+                'id': 3,
+                'name': 'actor3',
+            },
+            {
+                'id': 4,
+                'name': 'actor4',
+            },
+        ]
+
+    },
 ]
 
 const GENRES = [

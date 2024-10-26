@@ -1,6 +1,7 @@
 import { MOVIES } from "../../data";
 import HeaderCarousel from "../components/HeaderCarousel";
 import MoviesCarousel from "../components/MoviesCarousel";
+import animeImg from './../../public/bg_imgs/anime.jpg';
 
 
 function Dashboard() {
@@ -13,7 +14,7 @@ function Dashboard() {
                 <MoviesCarousel data={MOVIES} sectionTitle='ფილმები' link='/movies' />
                 <MoviesCarousel data={MOVIES} sectionTitle='სერიალები' link='/serials' />
                 <MoviesCarousel data={MOVIES} sectionTitle='მულტფილმები' link='/movies' />
-                <MoviesCarousel data={MOVIES} sectionTitle='ანიმეები' link='/animes' bgImg='anime.jpg' />
+                <MoviesCarousel data={MOVIES} sectionTitle='ანიმეები' link='/animes' bgImg={animeImg} />
             </div>
         </div>
     )

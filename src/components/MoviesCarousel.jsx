@@ -8,11 +8,13 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import './changeSwiper.css'
 import { Link } from 'react-router-dom';
+import animeImg from './../../public/bg_imgs/anime.jpg';
+
 
 function MoviesCarousel({data, sectionTitle, link, bgImg}) {
     return (
         <div className='relative'>
-        {bgImg && <div className={` bg-[url('/bg_imgs/${bgImg}')] absolute w-full h-72 md:h-[105%] -z-10 opacity-30`}> </div>}
+        {bgImg && <div style={{backgroundImage: `url(${bgImg})`}} className={` absolute w-full h-72 md:h-[105%] -z-10 opacity-30`}> </div>}
             <div className="w-[90vw] md:w-[70vw] mx-auto movieList mt-14 ">
                 <div className='flex justify-between w-[98%] '>
                     <div className='text-2xl'>{sectionTitle}</div>
@@ -34,7 +36,7 @@ function MoviesCarousel({data, sectionTitle, link, bgImg}) {
                     }}
                     navigation
                     longSwipesRatio={100}
-                    onSlideChange={ (swiper) => console.log(swiper.activeIndex)}
+                    
                     slidesPerGroup={3}
         >
                     {data.map(movie => (

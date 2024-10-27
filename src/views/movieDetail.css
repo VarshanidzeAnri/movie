@@ -1,0 +1,56 @@
+/* CustomVideoPlayer.css */
+
+.custom-video-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 40px auto;
+    position: relative;
+  }
+  
+  .react-player {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 90%;
+    margin-top: 15px;
+  }
+  
+  .control-button {
+    font-size: 20px;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .control-button:hover {
+    color: #007bff;
+  }
+  
+  .progress-bar, .volume-bar {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: #ddd;
+    cursor: pointer;
+  }
+  
+  .progress-bar {
+    width: 60%;
+  }
+  
+  .volume-bar {
+    width: 20%;
+  }

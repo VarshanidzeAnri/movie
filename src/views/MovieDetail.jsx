@@ -5,21 +5,17 @@ function MovieDetail() {
     return (
         <div className="w-[90%] lg:w-[70vw] mx-auto flex flex-col gap-5 mb-10">
 
-                <div className="w-full flex justify-start gap-5 mt-5 lg:mt-0">
+                <div className="w-full flex justify-start gap-3 mt-5 lg:mt-0">
                     <div className="hidden lg:block h-[50vh] w-[30%]"><img src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg" className=" h-full object-cover rounded-md" /></div>
                     {/* <div className="h-[30vh] md:h-[50vh] w-full lg:w-[70%]"><img src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg" className="w-full h-full object-cover rounded-md" /></div> */}
-                    {/* <div className="  text-white h-[30vh] md:h-[50vh] w-full lg:w-[70%] ">
-                            <VideoPlayer />
-                    </div> */}
-
-        <div className="bg-gray-900 min-h-screen flex items-center justify-center">
-            <div className="text-white text-center">
-                <VideoPlayer />
-            </div>
-        </div>
+                    
+                    <div className="h-[30vh] md:h-[50vh] w-full lg:w-[70%]">
+                        <VideoPlayer className='w-full h-full object-cover rounded-lg' />
+                    </div>
+                    
                 </div>
 
-                <div className="flex flex-col gap-2 md:gap-3 p-5 pt-2 bg-zinc-800 w-full rounded-md">
+                <div className="flex flex-col gap-2 md:gap-3 p-5 pt-2 bg-zinc-800 w-full rounded-md mt-60">
                         <div>
                             <div className="text-2xl mt-2">ლურჯი საკეტი</div>
                             <div className="text-xl mt-2">Bluelock</div>

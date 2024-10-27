@@ -15,7 +15,6 @@ function VideoPlayer() {
     const [showVolumeSlider, setShowVolumeSlider] = useState(false); // State for volume slider visibility
     const [isPiP, setIsPiP] = useState(false); // State for Picture-in-Picture
 
-
     const videoUrls = {
         '720p': sampleVideo,
         '1080p': 'https://www.example.com/video_1080p.mp4',
@@ -24,7 +23,7 @@ function VideoPlayer() {
   
    
     const handlePlayPause = () => {
-        setPlaying(!playing);
+        setPlaying(play => !play);
     };
 
     const handleVolumeChange = (event) => {
@@ -108,104 +107,105 @@ function VideoPlayer() {
 
     return (
         <div className="max-w-2xl mx-auto p-4 bg-gray-800 rounded-lg shadow-lg">
-        <ReactPlayer
-            ref={playerRef}
-            url={videoUrls[quality]}
-            playing={playing}
-            volume={volume}
-            onDuration={setDuration}
-            onProgress={({ played }) => setPlayed(played)}
-            onPlay={handlePlay} // Handle play event
-            onPause={handlePause} // Handle pause event
-            width="100%"
-            height="100%"
-        />
-
-        {/* Video Timing Slider */}
-        <div className="mt-2">
-            <input
-                type="range"
-                min={0}
-                max={1}
-                step={0.01}
-                value={played}
-                onChange={handleSeekChange}
-                className="w-full mx-2"
+            <ReactPlayer
+                ref={playerRef}
+                url={videoUrls[quality]}
+                playing={playing}
+                volume={volume}
+                onDuration={setDuration}
+                onProgress={({ played }) => setPlayed(played)}
+                onPlay={handlePlay} // Handle play event
+                onPause={handlePause} // Handle pause event
+                width="100%"
+                height="100%"
+                onClick={handlePlayPause} // Add click to play/pause functionality
             />
-            <div className="text-center text-white mt-2">
-                <span>{formatTime(Math.floor(duration * played))} / {formatTime(duration)} </span>
+
+            {/* Video Timing Slider */}
+            <div className="mt-2">
+                <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={played}
+                    onChange={handleSeekChange}
+                    className="w-full mx-2"
+                />
+                <div className="text-center text-white mt-2">
+                    <span>{formatTime(Math.floor(duration * played))} / {formatTime(duration)} </span>
+                </div>
             </div>
-        </div>
 
-        {/* Control Buttons */}
-        <div className="flex items-center justify-between mt-4">
-            <button
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                onClick={handleRewind}
-            >
-                ⏪ 5s
-            </button>
-            <button
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                onClick={handlePlayPause}
-            >
-                {playing ? (
-                    <span className="text-xl">⏸️</span> // Pause icon
-                ) : (
-                    <span className="text-xl">▶️</span> // Play icon
-                )}
-            </button>
-            <button
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                onClick={handleFastForward}
-            >
-                5s ⏩
-            </button>
-            <select
-                value={quality}
-                onChange={handleQualityChange}
-                className="bg-gray-700 text-white rounded py-2 px-4"
-            >
-                <option value="720p">720p</option>
-                <option value="1080p">1080p</option>
-                <option value="4K">4K</option>
-            </select>
-            {/* PiP Button with Icon */}
-            <button
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                onClick={togglePiP}
-            >
-                {isPiP ? '📺' : '🖼️'} {/* Picture-in-Picture icon changes based on PiP state */}
-            </button>
-        </div>
-
-        {/* Volume Control */}
-        <div className="mt-4 flex items-center">
-            {/* Volume Icon and Slider in Same Container */}
-            <div 
-                className="flex items-center" 
-                onMouseEnter={() => setShowVolumeSlider(true)} 
-                onMouseLeave={() => setShowVolumeSlider(false)}
-            >
-                <button className="text-white mr-2" onClick={handleVolumeToggle}>
-                    {volume > 0 ? '🔊' : '🔇'} {/* Volume icon changes based on volume state */}
+            {/* Control Buttons */}
+            <div className="flex items-center justify-between mt-4">
+                <button
+                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                    onClick={handleRewind}
+                >
+                    ⏪ 5s
                 </button>
-                
-                {/* Volume Slider */}
-                {showVolumeSlider && (
-                    <input
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.01}
-                        value={volume}
-                        onChange={handleVolumeChange} // Update volume on change
-                        className="w-32 mx-2" // Adjust width as necessary
-                    />
-                )}
+                <button
+                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                    onClick={handlePlayPause}
+                >
+                    {playing ? (
+                        <span className="text-xl">⏸️</span> // Pause icon
+                    ) : (
+                        <span className="text-xl">▶️</span> // Play icon
+                    )}
+                </button>
+                <button
+                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                    onClick={handleFastForward}
+                >
+                    5s ⏩
+                </button>
+                <select
+                    value={quality}
+                    onChange={handleQualityChange}
+                    className="bg-gray-700 text-white rounded py-2 px-4"
+                >
+                    <option value="720p">720p</option>
+                    <option value="1080p">1080p</option>
+                    <option value="4K">4K</option>
+                </select>
+                {/* PiP Button with Icon */}
+                <button
+                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                    onClick={togglePiP}
+                >
+                    {isPiP ? '📺' : '🖼️'} {/* Picture-in-Picture icon changes based on PiP state */}
+                </button>
+            </div>
+
+            {/* Volume Control */}
+            <div className="mt-4 flex items-center">
+                {/* Volume Icon and Slider in Same Container */}
+                <div 
+                    className="flex items-center" 
+                    onMouseEnter={() => setShowVolumeSlider(true)} 
+                    onMouseLeave={() => setShowVolumeSlider(false)}
+                >
+                    <button className="text-white mr-2" onClick={handleVolumeToggle}>
+                        {volume > 0 ? '🔊' : '🔇'} {/* Volume icon changes based on volume state */}
+                    </button>
+                    
+                    {/* Volume Slider */}
+                    {showVolumeSlider && (
+                        <input
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.01}
+                            value={volume}
+                            onChange={handleVolumeChange} // Update volume on change
+                            className="w-32 mx-2" // Adjust width as necessary
+                        />
+                    )}
+                </div>
             </div>
         </div>
-    </div>
     )
 }
 

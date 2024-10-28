@@ -2,8 +2,6 @@ import sampleVideo from './../../public/movies/m1.mp4';
 import React, { useState, useRef, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 
-
-
 function VideoPlayer() {
     const playerRef = useRef(null);
     const [playing, setPlaying] = useState(false);
@@ -11,20 +9,21 @@ function VideoPlayer() {
     const [prevVolume, setPrevVolume] = useState(0.8);
     const [played, setPlayed] = useState(0);
     const [duration, setDuration] = useState(0);
-    const [quality, setQuality] = useState('720p');
+    const [quality, setQuality] = useState('sd');
+    const [language, setLanguage] = useState('ge');
     const [showVolumeSlider, setShowVolumeSlider] = useState(false);
     const [isPiP, setIsPiP] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [showControls, setShowControls] = useState(true);
     const [hideCursor, setHideCursor] = useState(false);
+    const [lastClickedVideo, setLastClickedVideo] = useState(false); // Track if video was last clicked
 
-
-    const videoUrls = {
-        '720p': sampleVideo,
-        '1080p': 'https://www.example.com/video_1080p.mp4',
-        '4K': 'https://www.example.com/video_4k.mp4',
+    const movie = {
+        'ge': { quality: { 'sd': sampleVideo, 'hd': 'ge' } },
+        'en': { quality: { 'sd': sampleVideo, 'hd': 'en' } },
+        'ru': { quality: { 'sd': sampleVideo, 'hd': 'ru' } },
     };
-    
+
     const hideControlsTimeout = useRef(null);
     const mouseMoveTimeout = useRef(null);
 
@@ -33,7 +32,6 @@ function VideoPlayer() {
         setShowControls(true);
         setHideCursor(false);
 
-        // If video is playing, set a timeout to hide controls
         if (playing) {
             hideControlsTimeout.current = setTimeout(() => {
                 setShowControls(false);
@@ -41,10 +39,9 @@ function VideoPlayer() {
             }, 2000);
         }
     };
-  
-   
+
     const handlePlayPause = () => {
-        setPlaying(play => !play);
+        setPlaying(prev => !prev);
         resetControlsTimeout();
         // Show controls for 2 seconds when play/pause is clicked
         hideControlsTimeout.current = setTimeout(() => {
@@ -65,6 +62,10 @@ function VideoPlayer() {
 
     const handleQualityChange = (event) => {
         setQuality(event.target.value);
+    };
+
+    const handleLanguageChange = (event) => {
+        setLanguage(event.target.value);
     };
 
     const handleRewind = () => {
@@ -148,7 +149,6 @@ function VideoPlayer() {
     const handleMouseMove = () => {
         resetControlsTimeout();
 
-        // Reset stationary timeout only if video is playing
         if (playing) {
             clearTimeout(mouseMoveTimeout.current);
             mouseMoveTimeout.current = setTimeout(() => {
@@ -164,16 +164,35 @@ function VideoPlayer() {
         toggleFullscreen();
     };
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'ArrowLeft') {
+            handleRewind();
+        } else if (event.key === 'ArrowRight') {
+            handleFastForward();
+        } else if (lastClickedVideo && (event.key === ' ' || event.key === 'Enter')) {
+            event.preventDefault(); // Prevent scrolling
+            handlePlayPause(); // Play or pause the video
+        }
+    };
+
+    // Handle tracking of last interaction with video
     useEffect(() => {
-        return () => {
-            clearTimeout(hideControlsTimeout.current);
-            clearTimeout(mouseMoveTimeout.current);
+        const handleMouseMove = () => {
+            resetControlsTimeout();
         };
-    }, []);
+
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [playing, lastClickedVideo]);
 
     return (
         <div
-            className={`max-w-2xl mx-auto p-4 bg-gray-800 rounded-lg shadow-lg ${isFullscreen ? 'fixed inset-0 z-50' : ''} ${hideCursor ? 'cursor-none' : ''}`}
+            className={`relative ${isFullscreen ? 'fixed inset-0 z-50' : ''} ${hideCursor ? 'cursor-none' : ''}`}
             onDoubleClick={handleDoubleClick}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -181,7 +200,7 @@ function VideoPlayer() {
         >
             <ReactPlayer
                 ref={playerRef}
-                url={videoUrls[quality]}
+                url={movie[language].quality[quality]}
                 playing={playing}
                 volume={volume}
                 onDuration={setDuration}
@@ -192,88 +211,104 @@ function VideoPlayer() {
                 }}
                 onPause={() => {
                     setPlaying(false);
-                    resetControlsTimeout(); // Keep controls visible when paused
+                    resetControlsTimeout();
                 }}
                 width="100%"
                 height="100%"
                 onClick={handlePlayPause}
+                tabIndex={0} // Make it focusable
+                onFocus={() => setLastClickedVideo(true)} // Track focus
+                onBlur={() => setLastClickedVideo(false)} // Track loss of focus
             />
-
-            {/* Video Timing Slider */}
-            {showControls && (
-                <div className="mt-2">
-                    <input
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.01}
-                        value={played}
-                        onChange={handleSeekChange}
-                        className="w-full mx-2"
-                    />
-                    <div className="text-center text-white mt-2">
-                        <span>{formatTime(Math.floor(duration * played))} / {formatTime(duration)}</span>
-                    </div>
-                </div>
-            )}
-
-            {/* Control Buttons */}
-            {showControls && (
-                <div className="flex items-center justify-between mt-4">
-                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleRewind}>
-                        ⏪ 5s
-                    </button>
-                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handlePlayPause}>
-                        {playing ? '⏸️' : '▶️'}
-                    </button>
-                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleFastForward}>
-                        5s ⏩
-                    </button>
-                    <select
-                        value={quality}
-                        onChange={handleQualityChange}
-                        className="bg-gray-700 text-white rounded py-2 px-4"
-                    >
-                        <option value="720p">720p</option>
-                        <option value="1080p">1080p</option>
-                        <option value="4K">4K</option>
-                    </select>
-                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={togglePiP}>
-                        {isPiP ? '📺' : '🖼️'}
-                    </button>
-                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={toggleFullscreen}>
-                        {isFullscreen ? '🔲' : '🔲'}
-                    </button>
-                </div>
-            )}
-
-            {/* Volume Control */}
-            {showControls && (
-                <div className="mt-4 flex items-center">
-                    <div 
-                        className="flex items-center" 
-                        onMouseEnter={() => setShowVolumeSlider(true)} 
-                        onMouseLeave={() => setShowVolumeSlider(false)}
-                    >
-                        <button className="text-white mr-2" onClick={handleVolumeToggle}>
-                            {volume > 0 ? '🔊' : '🔇'}
-                        </button>
-                        {showVolumeSlider && (
+            <div className='absolute w-full bottom-3 left-0'>
+                <div className='w-[95%] mx-auto'>
+                    {showControls && (
+                        <div className="mt-2">
                             <input
                                 type="range"
                                 min={0}
                                 max={1}
                                 step={0.01}
-                                value={volume}
-                                onChange={handleVolumeChange}
-                                className="w-24"
+                                value={played}
+                                onChange={handleSeekChange}
+                                className="w-full mx-2"
                             />
-                        )}
-                    </div>
+                            <div className="text-center text-white mt-2">
+                                {formatTime(Math.floor(duration * played))} / {formatTime(duration)}
+                            </div>
+                        </div>
+                    )}
+
+                    {showControls && (
+                        <div className="flex items-center justify-between mt-4">
+                            <div className='flex items-center gap-3'>
+                                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handlePlayPause}>
+                                    {playing ? '⏸️' : '▶️'}
+                                </button>
+                                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleRewind}>
+                                    ⏪ 5s
+                                </button>
+                                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleFastForward}>
+                                    5s ⏩
+                                </button>
+
+                                <div className="flex items-center">
+                                    <div 
+                                        className="flex items-center" 
+                                        onMouseEnter={() => setShowVolumeSlider(true)} 
+                                        onMouseLeave={() => setShowVolumeSlider(false)}
+                                    >
+                                        <button className="text-white mr-2" onClick={handleVolumeToggle}>
+                                            {volume > 0 ? '🔊' : '🔇'}
+                                        </button>
+                                        {showVolumeSlider && (
+                                            <input
+                                                type="range"
+                                                min={0}
+                                                max={1}
+                                                step={0.01}
+                                                value={volume}
+                                                onChange={handleVolumeChange}
+                                                className="w-24"
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='flex items-center gap-3'> 
+                                <select
+                                    value={quality}
+                                    onChange={handleQualityChange}
+                                    className="bg-gray-700 text-white rounded py-2 px-4"
+                                >
+                                    <option value="sd">SD</option>
+                                    <option value="hd">HD</option>
+                                </select>
+
+                                <select
+                                    value={language}
+                                    onChange={handleLanguageChange}
+                                    className="bg-gray-700 text-white rounded py-2 px-4"
+                                >
+                                    <option value="ge">ge</option>
+                                    <option value="en">en</option>
+                                    <option value="ru">ru</option>
+                                </select>
+
+                                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={togglePiP}>
+                                    {isPiP ? '📺' : '🖼️'}
+                                </button>
+                                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={toggleFullscreen}>
+                                    {isFullscreen ? '🔲' : '🔲'}
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
         </div>
-    )
+    );
 }
 
-export default VideoPlayer
+export default VideoPlayer;

@@ -15,16 +15,43 @@ function VideoPlayer() {
     const [showVolumeSlider, setShowVolumeSlider] = useState(false);
     const [isPiP, setIsPiP] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [showControls, setShowControls] = useState(true);
+    const [hideCursor, setHideCursor] = useState(false);
+
 
     const videoUrls = {
         '720p': sampleVideo,
         '1080p': 'https://www.example.com/video_1080p.mp4',
         '4K': 'https://www.example.com/video_4k.mp4',
     };
+    
+    const hideControlsTimeout = useRef(null);
+    const mouseMoveTimeout = useRef(null);
+
+    const resetControlsTimeout = () => {
+        clearTimeout(hideControlsTimeout.current);
+        setShowControls(true);
+        setHideCursor(false);
+
+        // If video is playing, set a timeout to hide controls
+        if (playing) {
+            hideControlsTimeout.current = setTimeout(() => {
+                setShowControls(false);
+                setHideCursor(true);
+            }, 2000);
+        }
+    };
   
    
     const handlePlayPause = () => {
         setPlaying(play => !play);
+        resetControlsTimeout();
+        // Show controls for 2 seconds when play/pause is clicked
+        hideControlsTimeout.current = setTimeout(() => {
+            if (!playing) {
+                setShowControls(false);
+            }
+        }, 2000);
     };
 
     const handleVolumeChange = (event) => {
@@ -105,97 +132,147 @@ function VideoPlayer() {
         };
     }, []);
 
+    const handleMouseEnter = () => {
+        resetControlsTimeout();
+    };
+
+    const handleMouseLeave = () => {
+        if (playing) {
+            hideControlsTimeout.current = setTimeout(() => {
+                setShowControls(false);
+                setHideCursor(true);
+            }, 2000);
+        }
+    };
+
+    const handleMouseMove = () => {
+        resetControlsTimeout();
+
+        // Reset stationary timeout only if video is playing
+        if (playing) {
+            clearTimeout(mouseMoveTimeout.current);
+            mouseMoveTimeout.current = setTimeout(() => {
+                if (playing) {
+                    setShowControls(false);
+                    setHideCursor(true);
+                }
+            }, 2000);
+        }
+    };
+
     const handleDoubleClick = () => {
         toggleFullscreen();
     };
 
+    useEffect(() => {
+        return () => {
+            clearTimeout(hideControlsTimeout.current);
+            clearTimeout(mouseMoveTimeout.current);
+        };
+    }, []);
+
     return (
         <div
-        className={`max-w-2xl mx-auto p-4 bg-gray-800 rounded-lg shadow-lg ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}
-        onDoubleClick={handleDoubleClick}
-    >
-        <ReactPlayer
-            ref={playerRef}
-            url={videoUrls[quality]}
-            playing={playing}
-            volume={volume}
-            onDuration={setDuration}
-            onProgress={({ played }) => setPlayed(played)}
-            onPlay={() => setPlaying(true)}
-            onPause={() => setPlaying(false)}
-            width="100%"
-            height="100%"
-            onClick={handlePlayPause}
-        />
-
-        {/* Video Timing Slider */}
-        <div className="mt-2">
-            <input
-                type="range"
-                min={0}
-                max={1}
-                step={0.01}
-                value={played}
-                onChange={handleSeekChange}
-                className="w-full mx-2"
+            className={`max-w-2xl mx-auto p-4 bg-gray-800 rounded-lg shadow-lg ${isFullscreen ? 'fixed inset-0 z-50' : ''} ${hideCursor ? 'cursor-none' : ''}`}
+            onDoubleClick={handleDoubleClick}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onMouseMove={handleMouseMove}
+        >
+            <ReactPlayer
+                ref={playerRef}
+                url={videoUrls[quality]}
+                playing={playing}
+                volume={volume}
+                onDuration={setDuration}
+                onProgress={({ played }) => setPlayed(played)}
+                onPlay={() => {
+                    setPlaying(true);
+                    resetControlsTimeout();
+                }}
+                onPause={() => {
+                    setPlaying(false);
+                    resetControlsTimeout(); // Keep controls visible when paused
+                }}
+                width="100%"
+                height="100%"
+                onClick={handlePlayPause}
             />
-            <div className="text-center text-white mt-2">
-                <span>{formatTime(Math.floor(duration * played))} / {formatTime(duration)}</span>
-            </div>
-        </div>
 
-        {/* Control Buttons */}
-        <div className="flex items-center justify-between mt-4">
-            <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleRewind}>
-                ⏪ 5s
-            </button>
-            <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handlePlayPause}>
-                {playing ? '⏸️' : '▶️'}
-            </button>
-            <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleFastForward}>
-                5s ⏩
-            </button>
-            <select
-                value={quality}
-                onChange={handleQualityChange}
-                className="bg-gray-700 text-white rounded py-2 px-4"
-            >
-                <option value="720p">720p</option>
-                <option value="1080p">1080p</option>
-                <option value="4K">4K</option>
-            </select>
-            <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={togglePiP}>
-                {isPiP ? '📺' : '🖼️'}
-            </button>
-            <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={toggleFullscreen}>
-                {isFullscreen ? '🔲' : '🔲'}
-            </button>
-        </div>
-
-        {/* Volume Control */}
-        <div className="mt-4 flex items-center">
-            <div 
-                className="flex items-center" 
-                onMouseEnter={() => setShowVolumeSlider(true)} 
-                onMouseLeave={() => setShowVolumeSlider(false)}
-            >
-                <button className="text-white mr-2" onClick={handleVolumeToggle}>
-                    {volume > 0 ? '🔊' : '🔇'}
-                </button>
-                {showVolumeSlider && (
+            {/* Video Timing Slider */}
+            {showControls && (
+                <div className="mt-2">
                     <input
                         type="range"
                         min={0}
                         max={1}
                         step={0.01}
-                        value={volume}
-                        onChange={handleVolumeChange}
-                        className="w-32 mx-2"
+                        value={played}
+                        onChange={handleSeekChange}
+                        className="w-full mx-2"
                     />
-                )}
-            </div>
+                    <div className="text-center text-white mt-2">
+                        <span>{formatTime(Math.floor(duration * played))} / {formatTime(duration)}</span>
+                    </div>
+                </div>
+            )}
+
+            {/* Control Buttons */}
+            {showControls && (
+                <div className="flex items-center justify-between mt-4">
+                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleRewind}>
+                        ⏪ 5s
+                    </button>
+                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handlePlayPause}>
+                        {playing ? '⏸️' : '▶️'}
+                    </button>
+                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleFastForward}>
+                        5s ⏩
+                    </button>
+                    <select
+                        value={quality}
+                        onChange={handleQualityChange}
+                        className="bg-gray-700 text-white rounded py-2 px-4"
+                    >
+                        <option value="720p">720p</option>
+                        <option value="1080p">1080p</option>
+                        <option value="4K">4K</option>
+                    </select>
+                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={togglePiP}>
+                        {isPiP ? '📺' : '🖼️'}
+                    </button>
+                    <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={toggleFullscreen}>
+                        {isFullscreen ? '🔲' : '🔲'}
+                    </button>
+                </div>
+            )}
+
+            {/* Volume Control */}
+            {showControls && (
+                <div className="mt-4 flex items-center">
+                    <div 
+                        className="flex items-center" 
+                        onMouseEnter={() => setShowVolumeSlider(true)} 
+                        onMouseLeave={() => setShowVolumeSlider(false)}
+                    >
+                        <button className="text-white mr-2" onClick={handleVolumeToggle}>
+                            {volume > 0 ? '🔊' : '🔇'}
+                        </button>
+                        {showVolumeSlider && (
+                            <input
+                                type="range"
+                                min={0}
+                                max={1}
+                                step={0.01}
+                                value={volume}
+                                onChange={handleVolumeChange}
+                                className="w-24"
+                            />
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
-    </div>
     )
 }
 

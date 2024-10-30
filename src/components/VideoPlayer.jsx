@@ -1,314 +1,265 @@
-import sampleVideo from './../../public/movies/m1.mp4';
-import React, { useState, useRef, useEffect } from 'react';
-import ReactPlayer from 'react-player';
+import movie from './../../public/movies/m1.mp4';
+import React, { useRef, useState, useEffect } from "react";
+import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaExpand, FaBackward, FaForward } from "react-icons/fa";
 
 function VideoPlayer() {
-    const playerRef = useRef(null);
-    const [playing, setPlaying] = useState(false);
-    const [volume, setVolume] = useState(0.8);
-    const [prevVolume, setPrevVolume] = useState(0.8);
-    const [played, setPlayed] = useState(0);
-    const [duration, setDuration] = useState(0);
-    const [quality, setQuality] = useState('sd');
-    const [language, setLanguage] = useState('ge');
-    const [showVolumeSlider, setShowVolumeSlider] = useState(false);
-    const [isPiP, setIsPiP] = useState(false);
-    const [isFullscreen, setIsFullscreen] = useState(false);
-    const [showControls, setShowControls] = useState(true);
-    const [hideCursor, setHideCursor] = useState(false);
-    const [lastClickedVideo, setLastClickedVideo] = useState(false); // Track if video was last clicked
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isVolumeHovered, setIsVolumeHovered] = useState(false);
+  const [selectedQuality, setSelectedQuality] = useState("hd");
+  const [selectedLanguage, setSelectedLanguage] = useState("geo");
+  const [videoFocused, setVideoFocused] = useState(false); // Track if video was focused
 
-    const movie = {
-        'ge': { quality: { 'sd': sampleVideo, 'hd': 'ge' } },
-        'en': { quality: { 'sd': sampleVideo, 'hd': 'en' } },
-        'ru': { quality: { 'sd': sampleVideo, 'hd': 'ru' } },
+  const videoSources = {
+    geo: { sd: movie, hd: movie },
+    en: { sd: movie, hd: movie },
+    ru: { sd: movie, hd: movie },
+  };
+
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    videoRef.current.muted = !isMuted;
+  };
+
+  const handleVolumeChange = (e) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    videoRef.current.volume = newVolume;
+  };
+
+  const handleFullscreen = () => {
+    if (!isFullscreen) {
+      videoRef.current.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
+  useEffect(() => {
+    const updateTime = () => {
+      if (videoRef.current) {
+        setCurrentTime(videoRef.current.currentTime);
+      }
     };
 
-    const hideControlsTimeout = useRef(null);
-    const mouseMoveTimeout = useRef(null);
-
-    const resetControlsTimeout = () => {
-        clearTimeout(hideControlsTimeout.current);
-        setShowControls(true);
-        setHideCursor(false);
-
-        if (playing) {
-            hideControlsTimeout.current = setTimeout(() => {
-                setShowControls(false);
-                setHideCursor(true);
-            }, 2000);
-        }
+    const setVideoDuration = () => {
+      if (videoRef.current) {
+        setDuration(videoRef.current.duration);
+      }
     };
 
-    const handlePlayPause = () => {
-        setPlaying(prev => !prev);
-        resetControlsTimeout();
-        // Show controls for 2 seconds when play/pause is clicked
-        hideControlsTimeout.current = setTimeout(() => {
-            if (!playing) {
-                setShowControls(false);
-            }
-        }, 2000);
-    };
+    if (videoRef.current) {
+      videoRef.current.addEventListener("timeupdate", updateTime);
+      videoRef.current.addEventListener("loadedmetadata", setVideoDuration);
+    }
 
-    const handleVolumeChange = (event) => {
-        setVolume(parseFloat(event.target.value));
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.removeEventListener("timeupdate", updateTime);
+        videoRef.current.removeEventListener("loadedmetadata", setVideoDuration);
+      }
     };
+  }, [videoRef]);
 
-    const handleSeekChange = (event) => {
-        setPlayed(parseFloat(event.target.value));
-        playerRef.current.seekTo(parseFloat(event.target.value) * duration);
-    };
+  const handleSeek = (e) => {
+    const newTime = parseFloat(e.target.value);
+    videoRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
+  };
 
-    const handleQualityChange = (event) => {
-        setQuality(event.target.value);
-    };
+  const formatTime = (time) => {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = Math.floor(time % 60).toString().padStart(2, "0");
+    return hours > 0
+      ? `${hours}:${minutes.toString().padStart(2, 0)}:${seconds}`
+      : `${minutes}:${seconds}`;
+  };
 
-    const handleLanguageChange = (event) => {
-        setLanguage(event.target.value);
-    };
+  const skipTime = (seconds) => {
+    videoRef.current.currentTime = Math.min(Math.max(videoRef.current.currentTime + seconds, 0), duration);
+    setCurrentTime(videoRef.current.currentTime);
+  };
 
-    const handleRewind = () => {
-        playerRef.current.seekTo(playerRef.current.getCurrentTime() - 5);
-    };
-
-    const handleFastForward = () => {
-        playerRef.current.seekTo(playerRef.current.getCurrentTime() + 5);
-    };
-
-    const formatTime = (seconds) => {
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${hours > 0 ? hours + ':' : ''}${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    };
-
-    const handleVolumeToggle = () => {
-        if (volume === 0) {
-            setVolume(prevVolume);
-        } else {
-            setPrevVolume(volume);
-            setVolume(0);
-        }
-    };
-
-    const togglePiP = async () => {
-        if (isPiP) {
-            await document.exitPictureInPicture();
-            setIsPiP(false);
-        } else {
-            try {
-                await playerRef.current.getInternalPlayer().requestPictureInPicture();
-                setIsPiP(true);
-            } catch (error) {
-                console.error('Error entering Picture-in-Picture mode:', error);
-            }
-        }
-    };
-
-    const toggleFullscreen = () => {
-        if (!isFullscreen) {
-            playerRef.current.wrapper.requestFullscreen();
-        } else {
-            document.exitFullscreen();
-        }
-        setIsFullscreen(!isFullscreen);
-    };
-
-    const handlePiPChange = () => {
-        setIsPiP(false);
-    };
-
+  useEffect(() => {
     const handleFullscreenChange = () => {
-        setIsFullscreen(!!document.fullscreenElement);
+      const fullscreenElement = document.fullscreenElement;
+      setIsFullscreen(!!fullscreenElement);
     };
 
-    useEffect(() => {
-        document.addEventListener('leavepictureinpicture', handlePiPChange);
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
 
-        return () => {
-            document.removeEventListener('leavepictureinpicture', handlePiPChange);
-            document.removeEventListener('fullscreenchange', handleFullscreenChange);
-        };
-    }, []);
-
-    const handleMouseEnter = () => {
-        resetControlsTimeout();
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
+  }, []);
 
-    const handleMouseLeave = () => {
-        if (playing) {
-            hideControlsTimeout.current = setTimeout(() => {
-                setShowControls(false);
-                setHideCursor(true);
-            }, 2000);
+  useEffect(() => {
+    const handleKeydown = (e) => {
+      if (videoFocused) { // Only check if video was focused
+        if (e.key === "F" || e.key === "f") {
+          handleFullscreen();
+        } else if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault(); // Prevent default action (like scrolling down)
+          togglePlayPause();
+        } else if (e.key === "ArrowRight") {
+          e.preventDefault();
+          skipTime(5);
+        } else if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          skipTime(-5);
+        } else if (e.key >= 0 && e.key <= 9) {
+          const percentage = parseInt(e.key);
+          const newTime = (percentage / 10) * duration;
+          videoRef.current.currentTime = newTime;
+          setCurrentTime(newTime);
         }
+      }
     };
 
-    const handleMouseMove = () => {
-        resetControlsTimeout();
-
-        if (playing) {
-            clearTimeout(mouseMoveTimeout.current);
-            mouseMoveTimeout.current = setTimeout(() => {
-                if (playing) {
-                    setShowControls(false);
-                    setHideCursor(true);
-                }
-            }, 2000);
-        }
+    document.addEventListener("keydown", handleKeydown);
+    return () => {
+      document.removeEventListener("keydown", handleKeydown);
     };
+  }, [isPlaying, isFullscreen, duration, videoFocused]);
 
-    const handleDoubleClick = () => {
-        toggleFullscreen();
-    };
+  const handleDoubleClick = () => {
+    handleFullscreen();
+  };
 
-    const handleKeyDown = (event) => {
-        if (event.key === 'ArrowLeft') {
-            handleRewind();
-        } else if (event.key === 'ArrowRight') {
-            handleFastForward();
-        } else if (lastClickedVideo && (event.key === ' ' || event.key === 'Enter')) {
-            event.preventDefault(); // Prevent scrolling
-            handlePlayPause(); // Play or pause the video
-        }
-    };
+  const handleQualityChange = (e) => {
+    setSelectedQuality(e.target.value);
+    videoRef.current.src = videoSources[selectedLanguage][e.target.value];
+    videoRef.current.load();
+    if (isPlaying) {
+      videoRef.current.play();
+    }
+  };
 
-    // Handle tracking of last interaction with video
-    useEffect(() => {
-        const handleMouseMove = () => {
-            resetControlsTimeout();
-        };
+  const handleLanguageChange = (e) => {
+    setSelectedLanguage(e.target.value);
+    videoRef.current.src = videoSources[e.target.value][selectedQuality];
+    videoRef.current.load();
+    if (isPlaying) {
+      videoRef.current.play();
+    }
+  };
 
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('keydown', handleKeyDown);
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full">
+      <div className="relative w-full max-w-2xl">
+        <video
+          ref={videoRef}
+          className="w-full rounded-lg"
+          src={videoSources[selectedLanguage][selectedQuality]}
+          onClick={togglePlayPause}
+          onDoubleClick={handleDoubleClick}
+          onFocus={() => setVideoFocused(true)} // Track when video is focused
+          onBlur={() => setVideoFocused(false)} // Track when video loses focus
+          tabIndex="0" // Make the video element focusable
+        />
 
-        return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [playing, lastClickedVideo]);
-
-    return (
-        <div
-            className={`relative ${isFullscreen ? 'fixed inset-0 z-50' : ''} ${hideCursor ? 'cursor-none' : ''}`}
-            onDoubleClick={handleDoubleClick}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onMouseMove={handleMouseMove}
-        >
-            <ReactPlayer
-                ref={playerRef}
-                url={movie[language].quality[quality]}
-                playing={playing}
-                volume={volume}
-                onDuration={setDuration}
-                onProgress={({ played }) => setPlayed(played)}
-                onPlay={() => {
-                    setPlaying(true);
-                    resetControlsTimeout();
-                }}
-                onPause={() => {
-                    setPlaying(false);
-                    resetControlsTimeout();
-                }}
-                width="100%"
-                height="100%"
-                onClick={handlePlayPause}
-                tabIndex={0} // Make it focusable
-                onFocus={() => setLastClickedVideo(true)} // Track focus
-                onBlur={() => setLastClickedVideo(false)} // Track loss of focus
+        {/* Control Bar */}
+        <div className="absolute bottom-0 w-full bg-black bg-opacity-90 p-4 flex flex-col">
+          {/* Timing Slider */}
+          <div className="flex items-center w-full mb-2">
+            <span className="text-white text-sm">{formatTime(currentTime)}</span>
+            <input
+              type="range"
+              min="0"
+              max={duration}
+              step="0.1"
+              value={currentTime}
+              onChange={handleSeek}
+              className="flex-grow mx-2"
             />
-            <div className='absolute w-full bottom-3 left-0'>
-                <div className='w-[95%] mx-auto'>
-                    {showControls && (
-                        <div className="mt-2">
-                            <input
-                                type="range"
-                                min={0}
-                                max={1}
-                                step={0.01}
-                                value={played}
-                                onChange={handleSeekChange}
-                                className="w-full mx-2"
-                            />
-                            <div className="text-center text-white mt-2">
-                                {formatTime(Math.floor(duration * played))} / {formatTime(duration)}
-                            </div>
-                        </div>
-                    )}
+            <span className="text-white text-sm">{formatTime(duration)}</span>
+          </div>
 
-                    {showControls && (
-                        <div className="flex items-center justify-between mt-4">
-                            <div className='flex items-center gap-3'>
-                                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handlePlayPause}>
-                                    {playing ? '⏸️' : '▶️'}
-                                </button>
-                                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleRewind}>
-                                    ⏪ 5s
-                                </button>
-                                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleFastForward}>
-                                    5s ⏩
-                                </button>
+          {/* Control Buttons */}
+          <div className="flex items-center justify-between">
+            {/* Backward 5 Seconds Button */}
+            <button onClick={() => skipTime(-5)} className="text-white mx-2">
+              <FaBackward />
+            </button>
 
-                                <div className="flex items-center">
-                                    <div 
-                                        className="flex items-center" 
-                                        onMouseEnter={() => setShowVolumeSlider(true)} 
-                                        onMouseLeave={() => setShowVolumeSlider(false)}
-                                    >
-                                        <button className="text-white mr-2" onClick={handleVolumeToggle}>
-                                            {volume > 0 ? '🔊' : '🔇'}
-                                        </button>
-                                        {showVolumeSlider && (
-                                            <input
-                                                type="range"
-                                                min={0}
-                                                max={1}
-                                                step={0.01}
-                                                value={volume}
-                                                onChange={handleVolumeChange}
-                                                className="w-24"
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
+            {/* Play/Pause Button */}
+            <button onClick={togglePlayPause} className="text-white mx-2">
+              {isPlaying ? <FaPause /> : <FaPlay />}
+            </button>
 
-                            <div className='flex items-center gap-3'> 
-                                <select
-                                    value={quality}
-                                    onChange={handleQualityChange}
-                                    className="bg-gray-700 text-white rounded py-2 px-4"
-                                >
-                                    <option value="sd">SD</option>
-                                    <option value="hd">HD</option>
-                                </select>
+            {/* Forward 5 Seconds Button */}
+            <button onClick={() => skipTime(5)} className="text-white mx-2">
+              <FaForward />
+            </button>
 
-                                <select
-                                    value={language}
-                                    onChange={handleLanguageChange}
-                                    className="bg-gray-700 text-white rounded py-2 px-4"
-                                >
-                                    <option value="ge">ge</option>
-                                    <option value="en">en</option>
-                                    <option value="ru">ru</option>
-                                </select>
-
-                                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={togglePiP}>
-                                    {isPiP ? '📺' : '🖼️'}
-                                </button>
-                                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={toggleFullscreen}>
-                                    {isFullscreen ? '🔲' : '🔲'}
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
+            {/* Volume Control */}
+            <div
+              className="flex items-center"
+              onMouseEnter={() => setIsVolumeHovered(true)}
+              onMouseLeave={() => setIsVolumeHovered(false)}
+            >
+              <button onClick={toggleMute} className="text-white">
+                {isMuted || volume === 0 ? <FaVolumeMute /> : <FaVolumeUp />}
+              </button>
+              {isVolumeHovered && (
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  className="w-20 mx-2"
+                />
+              )}
             </div>
+
+            {/* Quality Selection */}
+            <select
+              value={selectedQuality}
+              onChange={handleQualityChange}
+              className="bg-gray-700 text-white rounded mx-2"
+            >
+              <option value="sd">SD</option>
+              <option value="hd">HD</option>
+            </select>
+
+            {/* Language Selection */}
+            <select
+              value={selectedLanguage}
+              onChange={handleLanguageChange}
+              className="bg-gray-700 text-white rounded mx-2"
+            >
+              <option value="geo">Georgian</option>
+              <option value="en">English</option>
+              <option value="ru">Russian</option>
+            </select>
+
+            {/* Fullscreen Button */}
+            <button onClick={handleFullscreen} className="text-white mx-2">
+              <FaExpand />
+            </button>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default VideoPlayer;

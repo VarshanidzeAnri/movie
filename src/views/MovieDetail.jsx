@@ -10,7 +10,7 @@ function MovieDetail() {
                     {/* <div className="h-[30vh] md:h-[50vh] w-full lg:w-[70%]"><img src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg" className="w-full h-full object-cover rounded-md" /></div> */}
                     
                     <div className="h-[30vh] md:h-[50vh] w-full lg:w-[70%]">
-                        <VideoPlayer className='w-full h-full object-cover rounded-lg' />
+                        <VideoPlayer className='w-full h-full object-cover rounded-md' />
                     </div>
                     
                 </div>

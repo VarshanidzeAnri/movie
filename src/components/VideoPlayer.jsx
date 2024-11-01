@@ -4,6 +4,7 @@ import { Slider } from '@mui/material';
 import { FastForward, FastRewind, Fullscreen, Pause, PlayArrow, VolumeOff, VolumeUp } from '@mui/icons-material';
 import { useEffect, useRef, useState } from 'react';
 import screenfull from 'screenfull';
+import './videoPlayer.css'
 
 function VideoPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -17,44 +18,99 @@ function VideoPlayer() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [seeking, setSeeking] = useState(false);
-  const [controlsVisible, setControlsVisible] = useState(true); // State to control visibility of controls
+  const [controlsVisible, setControlsVisible] = useState(true);
+  const [isFocused, setIsFocused] = useState(false); // Track if the player is focused
+  const [lastVolume, setLastVolume] = useState(1); // Track the last volume level
+
 
   const fullscreenRef = useRef();
   const playerRef = useRef();
-  const hideControlsTimeout = useRef(null); // Ref to keep track of the timeout
-  const mouseMoveTimeout = useRef(null); // Ref to track mouse movement
+  const hideControlsTimeout = useRef(null);
+  const mouseMoveTimeout = useRef(null);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key.toLowerCase() === 'f') toggleFullscreen();
-      // Seek functionality for keys 0 to 9
-      if (e.key >= '0' && e.key <= '9' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
-        const percentage = (parseInt(e.key) / 10); // Convert key to a percentage (0-1)
-        const seekTime = duration * percentage; // Calculate seek time based on total duration
-        playerRef.current.seekTo(seekTime);
+      if (e.key.toLowerCase() === 'f' && isFocused) toggleFullscreen();
+      if (isFocused && (e.key === ' ' || e.key === 'Enter')) {
+        e.preventDefault(); // Prevent default behavior for space/enter
+        handlePlaying(); // Play/Pause the video
       }
+      if (e.key >= '0' && e.key <= '9' && !e.ctrlKey && !e.shiftKey && !e.altKey && isFocused) {
+        const percentage = (parseInt(e.key) / 10);
+        const seekTime = duration * percentage;
+        playerRef.current.seekTo(seekTime);
+        setControlsVisible(true);
+      }
+
+      // Fast rewind on left arrow key
+      if (e.key === 'ArrowLeft' && isFocused) {
+        e.preventDefault(); // Prevent default action
+        handleRewind(); // Call the fast rewind function
+      }
+      // Fast forward on right arrow key
+      if (e.key === 'ArrowRight' && isFocused) {
+        e.preventDefault(); // Prevent default action
+        handleFastForward(); // Call the fast forward function
+      }
+// Volume up on arrow up key
+if (e.key === 'ArrowUp' && isFocused) {
+  e.preventDefault(); // Prevent default action
+  setVolume((prev) => {
+    const newVolume = Math.min(prev + 0.1, 1); // Increase volume by 10%
+    if (newVolume > 0) setIsMute(false); // Unmute if volume is increased from 0
+    return newVolume;
+  });
+}
+
+// Volume down on arrow down key
+if (e.key === 'ArrowDown' && isFocused) {
+  e.preventDefault(); // Prevent default action
+  setVolume((prev) => {
+    const newVolume = Math.max(prev - 0.1, 0); // Decrease volume by 10%
+    if (newVolume === 0) setIsMute(true); // Mute if volume goes down to 0
+    return newVolume;
+  });
+}
     };
     
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [duration]); // Add duration to the dependency array
+  }, [duration, isFocused]);
 
   const toggleFullscreen = () => {
     if (screenfull.isEnabled) {
       screenfull.toggle(fullscreenRef.current);
+      
     }
+  };
+
+  const handleMute = () => {
+    setIsMute((prev) => {
+      if (prev) {
+        // If currently muted, restore the last volume level
+        setVolume(lastVolume);
+      } else {
+        // If unmuted, store the current volume as lastVolume and mute
+        setLastVolume(volume); // Store current volume before muting
+        setVolume(0); // Mute
+      }
+      return !prev; // Toggle mute state
+    });
   };
 
   const handlePlaying = () => {
-    setIsPlaying((prev) => !prev);
-    if (!isPlaying) {
-      setControlsVisible(true); // Show controls when playing starts
-    }
+    setIsPlaying((prev) => {
+      const newState = !prev; // Toggle play state
+      if (!newState) {
+        setControlsVisible(true); // Show controls if video is paused
+      }
+      return newState;
+    });
   };
 
-  const handleMute = () => setIsMute((prev) => !prev);
-  const handleRewind = () => playerRef.current.seekTo(playerRef.current.getCurrentTime() - 10);
-  const handleFastForward = () => playerRef.current.seekTo(playerRef.current.getCurrentTime() + 10);
+  // const handleMute = () => setIsMute((prev) => !prev);
+  const handleRewind = () => playerRef.current.seekTo(playerRef.current.getCurrentTime() - 5);
+  const handleFastForward = () => playerRef.current.seekTo(playerRef.current.getCurrentTime() + 5);
 
   const handleVolumeChange = (e, newValue) => {
     setVolume(newValue / 100);
@@ -88,7 +144,7 @@ function VideoPlayer() {
 
   const onSeekMouseDown = () => {
     setSeeking(true);
-    setIsPlaying(false); // Stop playing when seeking
+    setIsPlaying(false);
   };
 
   const onSeekMouseUp = (e, newValue) => {
@@ -109,66 +165,77 @@ function VideoPlayer() {
 
   const handleMouseEnter = () => {
     setControlsVisible(true);
-    clearTimeout(hideControlsTimeout.current); // Clear any existing hide timeout
-    clearTimeout(mouseMoveTimeout.current); // Clear any existing mouse movement timeout
+    clearTimeout(hideControlsTimeout.current);
+    clearTimeout(mouseMoveTimeout.current);
   };
 
   const handleMouseLeave = () => {
-    // Start a timeout to hide the controls after 2 seconds only if video is playing
     if (isPlaying) {
       hideControlsTimeout.current = setTimeout(() => {
         setControlsVisible(false);
-      }, 2000); // Adjust the time as needed
+      }, 2000);
     }
   };
 
   const handleMouseMove = () => {
     setControlsVisible(true);
-    clearTimeout(hideControlsTimeout.current); // Clear hide timeout when mouse moves
-    // Restart the timeout for hiding controls after 2 seconds of inactivity only if video is playing
+    clearTimeout(hideControlsTimeout.current);
     if (isPlaying) {
-      clearTimeout(mouseMoveTimeout.current); // Clear previous mouse move timeout
+      clearTimeout(mouseMoveTimeout.current);
       mouseMoveTimeout.current = setTimeout(() => {
         hideControlsTimeout.current = setTimeout(() => {
           setControlsVisible(false);
         }, 2000);
-      }, 100); // Reset the mouse move timer
+      }, 100);
     }
   };
 
-  // Function to handle when video ends
   const handleEnded = () => {
-    setIsPlaying(false); // Pause the video
-    setControlsVisible(true)
+    setIsPlaying(false);
+    setControlsVisible(true);
+  };
+
+  // Double click handler for fullscreen
+  const handleDoubleClick = () => {
+    toggleFullscreen();
   };
 
   return (
     <div
       ref={fullscreenRef}
-      className={`w-full h-full relative ${!controlsVisible ? 'cursor-none' : ''}`} // Hide cursor if controls are hidden
+      className={`w-full h-full relative outline-none ${!controlsVisible ? 'cursor-none' : ''}`}
+      tabIndex={0} // Make the div focusable
+      onFocus={() => setIsFocused(true)} // Set focus state when focused
+      onBlur={() => setIsFocused(false)} // Clear focus state when blurred
     >
-      <ReactPlayer
-        ref={playerRef}
-        width="100%"
-        height="100%"
-        url={movieSource[language][quality]}
-        playing={isPlaying}
-        muted={isMute}
-        volume={volume}
-        onProgress={onProgress}
-        onDuration={setDuration}
-        onEnded={handleEnded} // Handle when video ends
-      />
-
-      {/* overlay */}
-      <div className="absolute top-0 right-0 left-0 bottom-0 bg-black opacity-30" 
-        onMouseEnter={handleMouseEnter} // Show controls when mouse enters the video area
-        onMouseLeave={handleMouseLeave} // Hide controls when mouse leaves
-        onMouseMove={handleMouseMove}>
-        
+      {/* Clickable area for video to play/pause */}
+      <div className="absolute inset-0 w-full">
+        <ReactPlayer
+          ref={playerRef}
+          width="100%"
+          height="100%"
+          url={movieSource[language][quality]}
+          playing={isPlaying}
+          muted={isMute}
+          volume={volume}
+          onProgress={onProgress}
+          onDuration={setDuration}
+          onEnded={handleEnded}
+          
+        />
       </div>
 
-      {/* Controls */}
+      {/* Overlay that captures click events */}
+        <div 
+        className={`absolute top-0 right-0 left-0 bottom-0 bg-black opacity-30 ${!controlsVisible && 'opacity-0'}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onMouseMove={handleMouseMove}
+        onClick={handlePlaying} // Click on overlay also plays/pauses video
+        onDoubleClick={handleDoubleClick} // Double click on overlay for fullscreen
+      >
+      </div>
+
       {controlsVisible && (
         <>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-start gap-10">
@@ -188,47 +255,47 @@ function VideoPlayer() {
               onChangeCommitted={onSeekMouseUp}
               aria-label="Seek"
               valueLabelDisplay="auto"
-              valueLabelFormat={(value) => formatTime(value)} // Display time in HH:MM:SS format
+              valueLabelFormat={(value) => formatTime(value)}
             />
-            <div className="p-2 flex justify-between">
-              <div className="flex justify-start gap-5 items-center">
-                <div onClick={handlePlaying} className="text-white">
-                  {isPlaying ? <Pause fontSize="large" /> : <PlayArrow fontSize="large" />}
+            <div className="flex justify-between mb-2">
+              <div className="flex justify-start gap-2 items-center">
+                <div onClick={handlePlaying} className="text-white cursor-pointer">
+                  {isPlaying ? <Pause  fontSize='medium' /> : <PlayArrow fontSize='medium'  />}
                 </div>
-                <div onClick={handleRewind} className="text-white">
-                  <FastRewind fontSize="large" />
+                <div onClick={handleRewind} className="text-white cursor-pointer">
+                  <FastRewind fontSize='medium' />
                 </div>
-                <div onClick={handleFastForward} className="text-white">
-                  <FastForward fontSize="large" />
+                <div onClick={handleFastForward} className="text-white cursor-pointer">
+                  <FastForward fontSize='medium'  />
                 </div>
-                <div onMouseEnter={() => setVolumeIsHidden(false)} onMouseLeave={() => setVolumeIsHidden(true)} className="relative flex gap-5 items-center justify-start">
-                  <div onClick={handleMute}>{isMute ? <VolumeOff fontSize="large" /> : <VolumeUp fontSize="large" />}</div>
+                <div onMouseEnter={() => setVolumeIsHidden(false)} onMouseLeave={() => setVolumeIsHidden(true)} className="relative flex gap-2 items-center justify-start">
+                  <div onClick={handleMute} className='cursor-pointer'>{isMute ? <VolumeOff fontSize="medium" /> : <VolumeUp fontSize="medium" />}</div>
                   <div className={`w-20 flex items-center ${volumeIsHidden && 'hidden'}`}>
-                    <Slider value={Math.round(volume * 100)} aria-label="Default" valueLabelDisplay="auto" onChange={handleVolumeChange} />
+                    <Slider value={Math.round(volume * 100)} aria-label="Default" valueLabelDisplay="auto" onChange={handleVolumeChange} size='small' />
                   </div>
                 </div>
-                <div className="text-white">
+                <div className="text-white text-sm ml-2">
                   {formatTime(currentTime)} / {formatTime(duration)}
                 </div>
               </div>
-              <div className="flex justify-end gap-5 items-center">
-                <div className="relative flex flex-col items-center p-3 bg-black">
+              <div className="flex justify-end gap-5 items-center ">
+                <div className="relative flex flex-col items-center p-2 bg-black text-sm">
                   <button onClick={() => setIsQualityPopOpen((prev) => !prev)} className="text-white">{quality.toUpperCase()}</button>
-                  <div className={`${!isQualityPopOpen && 'hidden'} absolute p-3 bottom-10 left-0 flex flex-col items-center gap-3 bg-black`}>
+                  <div className={`${!isQualityPopOpen && 'hidden'} absolute p-2 bottom-10 left-0 flex flex-col items-center gap-3 bg-black`}>
                     {['sd', 'hd'].map((q, i) => (
                       <button key={i} onClick={() => handleQualityPop(q)} className="text-white">{q.toUpperCase()}</button>
                     ))}
                   </div>
                 </div>
-                <div className="relative flex flex-col items-center p-3 bg-black">
+                <div className="relative flex flex-col items-center p-2 bg-black text-sm">
                   <button onClick={() => setIsLanguagePopOpen((prev) => !prev)} className="text-white">{language.toUpperCase()}</button>
-                  <div className={`${!isLanguagePopOpen && 'hidden'} absolute p-3 bottom-10 left-0 flex flex-col items-center gap-3 bg-black`}>
+                  <div className={`${!isLanguagePopOpen && 'hidden'} absolute p-2 bottom-10 left-0 flex flex-col items-center gap-3 bg-black`}>
                     {['geo', 'eng', 'rus'].map((lang, i) => (
                       <button key={i} onClick={() => handleLanguagePop(lang)} className="text-white">{lang.toUpperCase()}</button>
                     ))}
                   </div>
                 </div>
-                <div onClick={toggleFullscreen} className="text-white"><Fullscreen fontSize="large" /></div>
+                <div onClick={toggleFullscreen} className="text-white"><Fullscreen fontSize="medium" /></div>
               </div>
             </div>
           </div>

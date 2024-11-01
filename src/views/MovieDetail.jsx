@@ -15,7 +15,7 @@ function MovieDetail() {
                     
                 </div>
 
-                <div className="flex flex-col gap-2 md:gap-3 p-5 pt-2 bg-zinc-800 w-full rounded-md mt-60">
+                <div className="flex flex-col gap-2 md:gap-3 p-5 pt-2 bg-zinc-800 w-full rounded-md ">
                         <div>
                             <div className="text-2xl mt-2">ლურჯი საკეტი</div>
                             <div className="text-xl mt-2">Bluelock</div>

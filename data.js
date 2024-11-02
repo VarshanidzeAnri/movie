@@ -348,48 +348,109 @@ const MOVIES = [
 const GENRES = [
     {
         'id': 1,
-        'name': 'genre1',
+        'name': 'ანიმაციური',
     },
     {
         'id': 2,
-        'name': 'genre2',
+        'name': 'კომედია',
     },
     {
         'id': 3,
-        'name': 'genre3',
+        'name': 'საოჯახო',
     },
     {
         'id': 4,
-        'name': 'genre4',
+        'name': 'მძაფრ-სიუჟეტიანი',
     },
     {
         'id': 5,
-        'name': 'genre5',
+        'name': 'სათავგადასავლო',
     },
     {
         'id': 6,
-        'name': 'genre6',
+        'name': 'დეტექტივი',
     },
     {
         'id': 7,
-        'name': 'genre7',
+        'name': 'ისტორიული',
     },
     {
         'id': 8,
-        'name': 'genre8',
+        'name': 'კრიმინალური',
     },
     {
         'id': 9,
-        'name': 'genre9',
+        'name': 'მოკლემეტრაჟიანი',
     },
     {
         'id': 10,
-        'name': 'genre10',
+        'name': 'საშინელებათა',
     },
-    
+    {
+        'id': 11,
+        'name': 'სპორტული',
+    },
+    {
+        'id': 12,
+        'name': 'საახალწლო',
+    },
+    {
+        'id': 13,
+        'name': 'genre13',
+    },
+    {
+        'id': 14,
+        'name': 'genre14',
+    },
+    {
+        'id': 15,
+        'name': 'genre15',
+    },
+    {
+        'id': 26,
+        'name': 'genre15',
+    },
+    {
+        'id': 16,
+        'name': 'genre16',
+    },
+    {
+        'id': 17,
+        'name': 'genre17',
+    },
+    {
+        'id': 18,
+        'name': 'genre18',
+    },
+    {
+        'id': 19,
+        'name': 'genre19',
+    },
+    {
+        'id': 20,
+        'name': 'genre20',
+    },
+    {
+        'id': 21,
+        'name': 'genre21',
+    },
+    {
+        'id': 22,
+        'name': 'genre22',
+    },
+    {
+        'id': 23,
+        'name': 'genre23',
+    },
+    {
+        'id': 24,
+        'name': 'genre24',
+    },
+    {
+        'id': 25,
+        'name': 'genre25',
+    },
 ]
-
-
 
 export {MOVIES, GENRES}
 

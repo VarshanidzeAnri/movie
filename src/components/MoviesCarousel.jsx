@@ -18,7 +18,8 @@ function MoviesCarousel({data, sectionTitle, link, bgImg}) {
             <div className="w-[90vw] md:w-[70vw] mx-auto movieList mt-14 ">
                 <div className='flex justify-between w-[98%] '>
                     <div className='text-2xl'>{sectionTitle}</div>
-                    <Link to={link}>ყველას ნახვა</Link>
+                    {link && <Link to={link}>ყველას ნახვა</Link>}
+                    
                 </div>
                     <Swiper className='mt-7 md:mt-5'
                     modules={[Navigation, Pagination, A11y]}

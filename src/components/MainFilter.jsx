@@ -9,7 +9,7 @@ import './mainFilter.css'
 function MainFilter() {
     const [checked, setChecked] = useState([]);
     const [language, setLanguage] = useState([]);
-    const [yearMovie, setYearMovie] = useState(0);
+    const [movieYears, setMovieYears] = useState([]);
     const {pathname} = useLocation()
     const navigate = useNavigate();
     const fromRef = useRef();
@@ -30,7 +30,10 @@ function MainFilter() {
         const checkedData = Array.from(check)
         const languageSet = new Set(language);
         const languageData = Array.from(languageSet)
-        let path = `${pathname}?checked=${checkedData.toString()}&year=${yearMovie}&from=${fromRef.current.value}&to=${toRef.current.value}&lang=${languageData.toString()}`;
+        const yearSet = new Set(movieYears);
+        const yearData = Array.from(yearSet)
+        console.log(yearData)
+        let path = `${pathname}?checked=${checkedData.toString()}&year=${yearData.toString()}&from=${fromRef.current.value}&to=${toRef.current.value}&lang=${languageData.toString()}`;
         navigate(path)
         
         
@@ -59,9 +62,11 @@ function MainFilter() {
                         </div>  
                         <div className="flex flex-wrap gap-3 ">
                             {years.map((year, i) => (
-                                <div key={i} onClick={() => setYearMovie(year)}>
-                                <button form="genreForm"  type="submit" className="text-md" >{year}</button>
-                                </div>
+                                <div key={i} className="checkbox-wrapper-47">
+                                
+                                <input onClick={() => setMovieYears([...movieYears, year])} type="checkbox" name={year} checked={year.isChecked} id={`${year}`} />
+                                <label  className="text-base lg:text-xs xl:text-base" htmlFor={`${year}`}>{year}</label>
+                            </div>
                             ))}
                         </div>
                 </div>

@@ -6,13 +6,13 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { MOVIES } from '../../data';
 import 'swiper/css/autoplay';
-import GenresForm from "../components/GenresForm";
+import MainFilter from "../components/MainFilter";
 
 
 function Movies() {
     return (
         <div className="w-[90vw] md:w-[70vw] mx-auto ">
-            <GenresForm />
+            <MainFilter />
             <div className="w-full flex justify-start gap-5 flex-wrap mt-20 ">
             {MOVIES.map(movie => <MovieItem key={movie.id} movie={movie} />)}
             </div>

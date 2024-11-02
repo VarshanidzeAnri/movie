@@ -452,5 +452,23 @@ const GENRES = [
     },
 ]
 
-export {MOVIES, GENRES}
+const LANGUAGES = [
+    {
+        'id': 1,
+        'name': 'ქართული',
+        'shortname': 'geo',
+    },
+    {
+        'id': 2,
+        'name': 'ინგლისური',
+        'shortname': 'eng',
+    },
+    {
+        'id': 3,
+        'name': 'რუსული',
+        'shortname': 'rus',
+    },
+]
+
+export {MOVIES, GENRES, LANGUAGES}
 

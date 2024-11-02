@@ -221,6 +221,7 @@ if (e.key === 'ArrowDown' && isFocused) {
           onProgress={onProgress}
           onDuration={setDuration}
           onEnded={handleEnded}
+          controls={false}
           
         />
       </div>
@@ -237,7 +238,7 @@ if (e.key === 'ArrowDown' && isFocused) {
       </div>
 
       {controlsVisible && (
-        <>
+        <div className='react-player-video-controllers'>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-start gap-10">
             <div onClick={handlePlaying}>
               {isPlaying ? <Pause fontSize="large" /> : <PlayArrow fontSize="large" />}
@@ -299,7 +300,7 @@ if (e.key === 'ArrowDown' && isFocused) {
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

@@ -32,6 +32,10 @@ const router = createBrowserRouter([
                 path: '/:slug',
                 element: <MovieDetail />
             },
+            {
+                path: '/login',
+                element: <MovieDetail />
+            },
         ]
     },
     

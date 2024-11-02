@@ -6,6 +6,8 @@ import Animes from "./views/Animes";
 import NotFound from "./views/NotFound";
 import Layout from "./Layout/Layout";
 import MovieDetail from "./views/MovieDetail";
+import Login from "./views/Login";
+import Register from "./views/Register";
 
 const router = createBrowserRouter([
     {
@@ -34,7 +36,11 @@ const router = createBrowserRouter([
             },
             {
                 path: '/login',
-                element: <MovieDetail />
+                element: <Login />
+            },
+            {
+                path: '/register',
+                element: <Register />
             },
         ]
     },

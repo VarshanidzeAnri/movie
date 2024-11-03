@@ -6,20 +6,20 @@ function Comments() {
                     <div className='flex justify-between mt-2'>
                         <div className='flex flex-col gap-5 w-[45%] overflow-auto h-72 '>
                         <div className='text-xl '>კომენტარები</div>
-                            <div className='border-black border-2 p-3 flex flex-col flex-wrap break-all'>
+                            <div className='border-black border-r-0 border-2 p-3 flex flex-col flex-wrap break-all'>
                                 <div className='text-sm '>anri</div>
                                 <div className='text-lg'>magaria dzaan</div>
                             </div>
 
-                            <div className='border-black border-2 p-3 flex flex-col flex-wrap break-all'>
+                            <div className='border-black border-r-0 border-2 p-3 flex flex-col flex-wrap break-all'>
                                 <div className='text-sm '>anri</div>
                                 <div className='text-lg'>magaria dzaan</div>
                             </div>
-                            <div className='border-black border-2 p-3 flex flex-col flex-wrap break-all'>
+                            <div className='border-black border-r-0 border-2 p-3 flex flex-col flex-wrap break-all'>
                                 <div className='text-sm '>anri</div>
                                 <div className='text-lg'>magaria dzaan</div>
                             </div>
-                            <div className='border-black border-2 p-3 flex flex-col flex-wrap break-all'>
+                            <div className='border-black border-r-0 border-2 p-3 flex flex-col flex-wrap break-all'>
                                 <div className='text-sm '>anri</div>
                                 <div className='text-lg'>magaria dzaan</div>
                             </div>

@@ -8,7 +8,7 @@
 }
 
 .swiper-pagination-bullet-active{
-    background-color: white;
+    background-color: #ff0009;
 }
 
 .movieList .swiper-button-prev, .movieList .swiper-button-next{

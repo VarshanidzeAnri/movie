@@ -18,7 +18,7 @@ function MoviesCarousel({data, sectionTitle, link, bgImg}) {
             <div className="w-[90vw] md:w-[90vw] mx-auto movieList mt-14">
                 <div className='flex justify-between w-[98%]'>
                     <div className='text-2xl text-[#ff0009] font-bold'>{sectionTitle}</div>
-                    {link && <Link to={link} className='bg-[#ff0009] p-2 text-white font-bold rounded-md font-bold'>ყველას ნახვა</Link>}
+                    {link && <Link to={link} className='bg-[#ff0009] p-2 text-white font-bold rounded-md '>ყველას ნახვა</Link>}
                     
                 </div>
                     <Swiper className='mt-7 md:mt-5'
@@ -44,14 +44,14 @@ function MoviesCarousel({data, sectionTitle, link, bgImg}) {
                     <SwiperSlide key={movie.id}>
                         <div className='relative'>
                             <Link to={`/${movie.slug}`}><img src={movie.image} className='w-full h-[20vh] sm:h-[30vh] object-cover rounded-lg' /></Link>
-                            <div className='absolute bottom-0 w-full bg-zinc-800 opacity-80 rounded-b-lg text-white'>
+                            <div className='absolute bottom-0 w-full bg-black opacity-70 rounded-b-lg text-white'>
                                 <div className='flex justify-between text-xs lg:text-xl lg:w-[90%] mx-auto '>
                                     <div>GEO</div>
                                     <div className='opacity-30'>RUS</div>
                                     <div>ENG</div>
                                 </div>
                             </div>
-                            <div className='absolute top-0 right-0 p-1 bg-stone-700 opacity-80 rounded-md text-white'>2024</div>
+                            <div className='absolute top-0 right-0 p-1 bg-black opacity-70 rounded-md text-white'>2024</div>
                         </div>                    
                         <div className='ml-1'>
                         <div className='text-xl'>{movie.name}</div>

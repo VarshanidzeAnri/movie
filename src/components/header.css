@@ -1,0 +1,17 @@
+.logo_full{
+    display:block;
+   }
+ 
+  .logo_mobile{
+   display:none;
+  }
+ 
+ @media (max-width: 640px) and (min-width: 320px){
+   .logo_full{
+    display:none;
+   }
+ 
+   .logo_mobile{
+    display:block;
+   }
+ }

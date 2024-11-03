@@ -1,6 +1,6 @@
 /* width */
 .main-filter ::-webkit-scrollbar {
-    width: 2px;
+    width: 10px;
 }
 
 /* Track */

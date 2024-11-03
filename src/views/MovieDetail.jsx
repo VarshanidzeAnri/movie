@@ -6,6 +6,7 @@ import VideoPlayer from '../components/VideoPlayer';
 
 function MovieDetail() {
     return (
+        <div className='pb-20'>
         <div className="w-[90%] lg:w-[70vw] mx-auto flex flex-col gap-5 mb-10">
 
             <div className="w-full flex justify-start gap-3 mt-5 lg:mt-0">
@@ -37,8 +38,9 @@ function MovieDetail() {
                 </div>
                 <Comments />
                 <div>
-                <MoviesCarousel data={MOVIES} sectionTitle='მსგავსი ფილმები'  />
                 </div>
+        </div>
+                <MoviesCarousel data={MOVIES} sectionTitle='მსგავსი ფილმები'  />
         </div>
     )
 }

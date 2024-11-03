@@ -247,6 +247,7 @@ if (e.key === 'ArrowDown' && isFocused) {
 
           <div className="absolute right-0 left-0 bottom-0 w-[95%] mx-auto">
             <Slider
+              color='error'
               size="medium"
               value={currentTime}
               min={0}
@@ -272,7 +273,7 @@ if (e.key === 'ArrowDown' && isFocused) {
                 <div onMouseEnter={() => setVolumeIsHidden(false)} onMouseLeave={() => setVolumeIsHidden(true)} className="relative flex gap-2 items-center justify-start">
                   <div onClick={handleMute} className='cursor-pointer'>{isMute ? <VolumeOff fontSize="medium" /> : <VolumeUp fontSize="medium" />}</div>
                   <div className={`w-20 flex items-center ${volumeIsHidden && 'hidden'}`}>
-                    <Slider value={Math.round(volume * 100)} aria-label="Default" valueLabelDisplay="auto" onChange={handleVolumeChange} size='small' />
+                    <Slider value={Math.round(volume * 100)} aria-label="Default" valueLabelDisplay="auto" onChange={handleVolumeChange} size='small' color='error' />
                   </div>
                 </div>
                 <div className="text-white text-sm ml-2">
@@ -280,17 +281,17 @@ if (e.key === 'ArrowDown' && isFocused) {
                 </div>
               </div>
               <div className="flex justify-end gap-5 items-center ">
-                <div className="relative flex flex-col items-center p-2 bg-black text-sm">
+                <div className="relative flex flex-col items-center p-2 bg-[#ff0009] text-sm rounded">
                   <button onClick={() => setIsQualityPopOpen((prev) => !prev)} className="text-white">{quality.toUpperCase()}</button>
-                  <div className={`${!isQualityPopOpen && 'hidden'} absolute p-2 bottom-10 left-0 flex flex-col items-center gap-3 bg-black`}>
+                  <div className={`${!isQualityPopOpen && 'hidden'} absolute p-2 bottom-10 left-0 flex flex-col items-center gap-3 bg-black rounded-t`}>
                     {['sd', 'hd'].map((q, i) => (
                       <button key={i} onClick={() => handleQualityPop(q)} className="text-white">{q.toUpperCase()}</button>
                     ))}
                   </div>
                 </div>
-                <div className="relative flex flex-col items-center p-2 bg-black text-sm">
+                <div className="relative flex flex-col items-center p-2 bg-[#ff0009] text-sm rounded">
                   <button onClick={() => setIsLanguagePopOpen((prev) => !prev)} className="text-white">{language.toUpperCase()}</button>
-                  <div className={`${!isLanguagePopOpen && 'hidden'} absolute p-2 bottom-10 left-0 flex flex-col items-center gap-3 bg-black`}>
+                  <div className={`${!isLanguagePopOpen && 'hidden'} absolute p-2 bottom-10 left-0 flex flex-col items-center gap-3 bg-black rounded-t`}>
                     {['geo', 'eng', 'rus'].map((lang, i) => (
                       <button key={i} onClick={() => handleLanguagePop(lang)} className="text-white">{lang.toUpperCase()}</button>
                     ))}

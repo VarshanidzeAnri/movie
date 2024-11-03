@@ -12,5 +12,5 @@
 }
 
 .movieList .swiper-button-prev, .movieList .swiper-button-next{
-    --swiper-navigation-size: 15px;
+    --swiper-navigation-size: 30px;
 }

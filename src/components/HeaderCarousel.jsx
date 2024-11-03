@@ -20,11 +20,11 @@ function HeaderCarousel() {
         navigation
         pagination={{ clickable: true }}
         speed={1000}
-        // autoplay={{
-        //   delay: 3000,
-        //   pauseOnMouseEnter: true,
-        //   disableOnInteraction: false,
-        // }}  
+        autoplay={{
+          delay: 3000,
+          pauseOnMouseEnter: true,
+          disableOnInteraction: false,
+        }}  
         loop={true}
       >
         {MOVIES.map(movie => (

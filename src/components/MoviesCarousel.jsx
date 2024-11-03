@@ -15,10 +15,10 @@ function MoviesCarousel({data, sectionTitle, link, bgImg}) {
     return (
         <div className='relative'>
         {bgImg && <div style={{backgroundImage: `url(${bgImg})`}} className={` absolute w-full h-72 md:h-[105%] -z-10 opacity-30`}> </div>}
-            <div className="w-[90vw] md:w-[70vw] mx-auto movieList mt-14 ">
-                <div className='flex justify-between w-[98%] '>
-                    <div className='text-2xl'>{sectionTitle}</div>
-                    {link && <Link to={link}>ყველას ნახვა</Link>}
+            <div className="w-[90vw] md:w-[90vw] mx-auto movieList mt-14">
+                <div className='flex justify-between w-[98%]'>
+                    <div className='text-2xl text-[#ff0009] font-bold'>{sectionTitle}</div>
+                    {link && <Link to={link} className='bg-[#ff0009] p-2 text-white font-bold rounded-md '>ყველას ნახვა</Link>}
                     
                 </div>
                     <Swiper className='mt-7 md:mt-5'

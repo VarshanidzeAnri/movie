@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 function HeaderCarousel() {
     return (
-      <div className='w-full md:w-[70vw] mx-auto '>
+      <div className='w-full md:w-[80vw] mx-auto h-90'>
         <Swiper
         modules={[Navigation, Pagination, A11y, Autoplay]}
         spaceBetween={50}
@@ -20,17 +20,17 @@ function HeaderCarousel() {
         navigation
         pagination={{ clickable: true }}
         speed={1000}
-        autoplay={{
-          delay: 3000,
-          pauseOnMouseEnter: true,
-          disableOnInteraction: false,
-        }}  
+        // autoplay={{
+        //   delay: 3000,
+        //   pauseOnMouseEnter: true,
+        //   disableOnInteraction: false,
+        // }}  
         loop={true}
       >
         {MOVIES.map(movie => (
         <SwiperSlide key={movie.id}>
           <div className='relative'>
-            <Link to={`/${movie.slug}`}><img src={movie.image} className='w-full h-[30vh] sm:h-[70vh] object-cover rounded-lg' /></Link>
+            <Link to={`/${movie.slug}`}><img src={movie.image} className='w-full h-[30vh] sm:h-[50vh] object-cover rounded-lg' /></Link>
             <div className='absolute bottom-[10%] left-[50%] -translate-x-[50%] flex flex-col  items-center text-white'>
               <div className='text-3xl'>{movie.name}</div>
               <div className='text-xl'>{movie.name_en}</div>

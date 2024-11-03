@@ -45,26 +45,26 @@ function MainFilter() {
         <div>
         <form onSubmit={handleGenreSubmit} id="genreForm" className="flex justify-start items-center flex-wrap gap-5 p-5 main-filter  mx-auto ">
             
-             <div className="flex flex-col gap-3 lg:flex-row justify-between w-full ">
+             <div className="flex flex-col gap-3 lg:flex-row justify-between w-full text-white">
 
                 <div className="overflow-auto h-60 w-80 mx-auto"><CheckList onChacked={setChecked} checked={checked} contType="ჟანრი" data={GENRES} /></div>
 
                 <div className="overflow-auto flex flex-col items-center gap-5 mt-5 lg:mt-0 w-80 lg:w-[30%] h-60 mx-auto">
-                        <div className="self-center text-xl ">გამოშვების წელი</div>
+                        <div className="self-center text-2xl font-bold ">გამოშვების წელი</div>
                         <div className="flex items-center gap-2">
                             <div className="flex  gap-3">
-                                <input ref={fromRef} type="number" className="w-[15vw] lg:w-[5vw] bg-stone-300 text-black px-2 outline-none rounded-xl" />
+                                <input ref={fromRef} type="number" className="w-[15vw] lg:w-[5vw] bg-stone-300 text-black px-2 outline-none rounded-xl placeholder:text-black/50 placeholder:font-bold" placeholder="დან" />
                             </div>
                             <label>-</label>
                             <div className="flex gap-3">
-                                <input ref={toRef} type="number" className="w-[15vw] lg:w-[5vw] bg-stone-300 text-black px-2 outline-none rounded-xl" />
+                                <input ref={toRef} type="number" className="w-[15vw] lg:w-[5vw] bg-stone-300 text-black px-2 outline-none rounded-xl placeholder:text-black/50 placeholder:font-bold" placeholder="მდე" />
                             </div>  
                         </div>  
                         <div className="flex flex-wrap gap-3 ">
                             {years.map((year, i) => (
                                 <div key={i} className="checkbox-wrapper-47">
                                 
-                                <input onClick={() => setMovieYears([...movieYears, year])} type="checkbox" name={year} checked={year.isChecked} id={`${year}`} />
+                                <input  onClick={() => setMovieYears([...movieYears, year])} type="checkbox" name={year} checked={year.isChecked} id={`${year}`} />
                                 <label  className="text-base lg:text-xs xl:text-base" htmlFor={`${year}`}>{year}</label>
                             </div>
                             ))}
@@ -74,7 +74,7 @@ function MainFilter() {
                 <div className="mt-5 lg:mt-0 overflow-auto w-80 mx-auto"><CheckList onChacked={setLanguage} checked={language} contType="ენა" type='lang' data={LANGUAGES} /></div>
             
             </div>
-             <button form="genreForm" className=" w-full bg-green-500 p-2 rounded-lg text-white" >ძებნა</button>
+             <button form="genreForm" className=" w-full bg-[#ff0009] font-bold p-2 rounded-lg text-white" >ძებნა</button>
          </form>
         </div>
     )

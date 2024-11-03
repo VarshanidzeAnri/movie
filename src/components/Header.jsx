@@ -3,6 +3,7 @@ import { HiBars3 } from "react-icons/hi2";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { HiOutlineUserCircle } from "react-icons/hi2";
 import { useState } from "react";
+import logo from "./../../public/logo/logo.png"
 
 
 
@@ -11,22 +12,22 @@ function Header() {
   let [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { pathname } = useResolvedPath()
   return (
-    <header className="flex justify-center bg-black fixed top-0 w-full z-50">
+    <header className="flex justify-center bg-zinc-900 fixed top-0 w-full z-50">
 
       <div className="flex justify-between items-center w-[80%] mx-auto py-5">
-        <Link to='/'>logo</Link>
-        <div className="hidden lg:flex min-w-[25vw] justify-around border-gray-700 border-2 py-5 px-2 rounded-2xl bg-zinc-950">
-          <Link to='/' className={`p-3 rounded-xl ${pathname === '/' && 'bg-zinc-800'}`}>მთავარი</Link>
-          <Link to='/movies' className={`p-3 rounded-xl ${pathname === '/movies' && 'bg-zinc-800'}`}>ფილმები</Link>
-          <Link to='/serials' className={`p-3 rounded-xl ${pathname === '/serials' && 'bg-zinc-800'}`}>სერიალები</Link>
-          <Link to='animes' className={`p-3 rounded-xl ${pathname === '/animes' && 'bg-zinc-800'}`}>ანიმეები</Link>
+    <Link to='/' className=""><img src={logo}  className="w-full h-full object-cover"/></Link>
+        <div className="hidden lg:flex min-w-[25vw] justify-around border-[#ff0009] border-2 py-5 px-2 rounded-2xl bg-black">
+          <Link to='/' className={`p-3 rounded-xl text-white font-bold ${pathname === '/' && 'bg-[#ff0009] '}`}>მთავარი</Link>
+          <Link to='/movies' className={`p-3 rounded-xl text-white font-bold ${pathname === '/movies' && 'bg-[#ff0009] '}`}>ფილმები</Link>
+          <Link to='/serials' className={`p-3 rounded-xl text-white font-bold ${pathname === '/serials' && 'bg-[#ff0009] '}`}>სერიალები</Link>
+          <Link to='animes' className={`p-3 rounded-xl text-white font-bold ${pathname === '/animes' && 'bg-[#ff0009] '}`}>ანიმეები</Link>
         </div>
         <div className="hidden lg:flex items-center justify-end gap-5 w-32">
-          <div className="text-2xl flex justify-start">
-            <input className="w-[10vw] bg-stone-300 text-black px-2 outline-none rounded-l-xl" />
-            <button className="bg-stone-300 text-black rounded-r-xl px-2"><HiMagnifyingGlass /></button>
+          <div className=" flex justify-start ">
+            <input className="w-[10vw] font-bold  bg-black text-white p-3 outline-none rounded-l-xl" placeholder="ძებნა..." />
+            <button className="bg-black text-white rounded-r-xl px-2 font-black"><HiMagnifyingGlass /></button>
           </div>
-          <Link to='login' className="text-2xl"><HiOutlineUserCircle /></Link>
+          <Link to='login' className="text-4xl text-[#ff0009]"><HiOutlineUserCircle /></Link>
         </div>
 
         <div className="lg:hidden text-3xl">

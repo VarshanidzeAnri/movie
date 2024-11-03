@@ -14,7 +14,7 @@ function MovieItem({movie}) {
         <div key={movie.id} className="single-movie-item-ddss">
                             <div className='relative'>
                             <Link onClick={handleLinkClick} to={`/${movie.slug}`}>
-                            <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className={`text-7xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white opacity-100 ${!isHovered && 'hidden'}`}><HiOutlinePlayCircle /></div>
+                            <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className={`text-7xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-100  ${!isHovered && 'hidden'} `}><HiOutlinePlayCircle /></div>
 
                             <img src={movie.image} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className={`w-full h-[20vh] sm:h-[30vh] object-cover rounded-lg ${isHovered && 'border-2 border-[#ff0009]'}`} />
                             </Link>

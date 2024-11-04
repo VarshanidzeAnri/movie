@@ -1,4 +1,4 @@
-import { Link, useResolvedPath } from "react-router-dom"
+import { Link, Navigate, useResolvedPath } from "react-router-dom"
 import { HiBars3 } from "react-icons/hi2";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { HiOutlineUserCircle } from "react-icons/hi2";
@@ -6,13 +6,33 @@ import { useState } from "react";
 import logo from "./../../public/logo/logo.png"
 import logo2 from "./../../public/logo/logo2.2.png"
 import './header.css'
+import { useStateContext } from "../contexts/ContextProvider";
+import axiosClient from "../axios-clinet";
 
 
 
 
 function Header() {
+  const {token, removeToken} = useStateContext();
+  let [isOpenUserIcon, setIsOpenUserIcon] = useState(false);
   let [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { pathname } = useResolvedPath()
+
+  const logout = () => {
+    setIsOpenUserIcon(false)
+    setIsSidebarOpen(false)
+    axiosClient.post('/logout')
+    .then(() => {
+      removeToken();
+      location.reload();
+    })
+    .catch(err => {
+      const response = err.response
+      console.log(response);
+  })
+  }
+
+
 
   function handleLinkClick() {
     window.scrollTo({ top: 0 });
@@ -38,7 +58,22 @@ function Header() {
             <input className=" font-bold  bg-black text-white p-3 outline-none rounded-l-xl w-full " placeholder="ძებნა..." />
             <button className="bg-black text-white rounded-r-xl px-2 font-black"><HiMagnifyingGlass /></button>
           </div>
-          <Link onClick={handleLinkClick} to='login' className="text-4xl text-[#ff0009]"><HiOutlineUserCircle /></Link>
+          <div className="relative">
+            <div onClick={() => setIsOpenUserIcon(is => !is)}  className="text-4xl text-[#ff0009] cursor-pointer"><HiOutlineUserCircle /></div>
+           {isOpenUserIcon && token  && (
+             <div className="absolute top-12 right-5 bg-black p-3 flex flex-col gap-2 w-40">
+              <div onClick={() => setIsOpenUserIcon(is => !is)} className="p-2 cursor-pointer hover:bg-zinc-900">დამატება</div>
+              <div  className="p-2 cursor-pointer hover:bg-zinc-900" onClick={logout}>გასვლა</div>
+            </div>
+           )}
+
+           {isOpenUserIcon && !token && (
+            <div className="absolute top-12 right-5 bg-black p-3 flex flex-col gap-2 w-40">
+              <Link onClick={() => setIsOpenUserIcon(is => !is)} to='/login' className="p-2 cursor-pointer hover:bg-zinc-900">შესვლა</Link>
+              <Link onClick={() => setIsOpenUserIcon(is => !is)} to='/register' className="p-2 cursor-pointer hover:bg-zinc-900" >რეგისტრაცია</Link>
+            </div>
+           )}
+          </div>
         </div>
         {/* </div> */}
 
@@ -71,8 +106,30 @@ function Header() {
                   <div className="text-white">
                   <Link  to='animes' onClick={() => setIsSidebarOpen(false)}>ანიმაციები</Link>
                   </div>
-                  <div className="bg-[#ff0009] p-2 rounded-xl text-white mt-10">
-                  <Link  to='/login' onClick={() => setIsSidebarOpen(false)}>შესვლა</Link>
+
+                  
+                  <div className="mt-10 flex flex-col gap-7 text-center">
+                  {token ? (
+                    <>
+                      <div className="bg-[#ff0009] p-2 rounded-xl text-white">
+                      <Link  to='/login' onClick={() => setIsSidebarOpen(false)}>დამატება</Link>
+                      </div>
+                      <div className="bg-[#ff0009] p-2 rounded-xl text-white">
+                      <div onClick={logout} >გასვლა</div>
+                      </div>
+                  </>)
+                  :
+                  (
+                  <>
+                    <div className="bg-[#ff0009] p-2 rounded-xl text-white">
+                    <Link  to='/login' onClick={() => setIsSidebarOpen(false)}>შესვლა</Link>
+                    </div>
+                    <div className="bg-[#ff0009] p-2 rounded-xl text-white">
+                    <Link  to='/register' onClick={() => setIsSidebarOpen(false)}>რეგისტრაცია</Link>
+                    </div>
+                  </>
+                  )  
+                }
                 </div>
                 </div>
                 

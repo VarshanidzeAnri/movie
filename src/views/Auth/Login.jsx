@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import { Link, Navigate } from "react-router-dom"
-import axiosClient from "../axios-clinet";
-import { useStateContext } from "../contexts/ContextProvider";
+import axiosClient from "../../axios-clinet";
+import { useStateContext } from "../../contexts/ContextProvider";
 
 function Login() {
     const emailRef = useRef();

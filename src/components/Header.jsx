@@ -62,7 +62,7 @@ function Header() {
             <div onClick={() => setIsOpenUserIcon(is => !is)}  className="text-4xl text-[#ff0009] cursor-pointer"><HiOutlineUserCircle /></div>
            {isOpenUserIcon && token  && (
              <div className="absolute top-12 right-5 bg-black p-3 flex flex-col gap-2 w-40">
-              <div onClick={() => setIsOpenUserIcon(is => !is)} className="p-2 cursor-pointer hover:bg-zinc-900">დამატება</div>
+              <Link to='/add' onClick={() => setIsOpenUserIcon(is => !is)} className="p-2 cursor-pointer hover:bg-zinc-900">დამატება</Link>
               <div  className="p-2 cursor-pointer hover:bg-zinc-900" onClick={logout}>გასვლა</div>
             </div>
            )}
@@ -112,7 +112,7 @@ function Header() {
                   {token ? (
                     <>
                       <div className="bg-[#ff0009] p-2 rounded-xl text-white">
-                      <Link  to='/login' onClick={() => setIsSidebarOpen(false)}>დამატება</Link>
+                      <Link  to='/add' onClick={() => setIsSidebarOpen(false)}>დამატება</Link>
                       </div>
                       <div className="bg-[#ff0009] p-2 rounded-xl text-white">
                       <div onClick={logout} >გასვლა</div>

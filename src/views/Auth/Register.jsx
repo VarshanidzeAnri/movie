@@ -1,7 +1,7 @@
 import { useRef } from "react"
 import { Link, Navigate, useNavigate } from "react-router-dom"
-import axiosClient from "../axios-clinet";
-import { useStateContext } from "../contexts/ContextProvider";
+import axiosClient from "../../axios-clinet";
+import { useStateContext } from "../../contexts/ContextProvider";
 
 function Register() {
     const nameRef = useRef();

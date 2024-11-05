@@ -6,8 +6,11 @@ import Animes from "./views/Animes";
 import NotFound from "./views/NotFound";
 import Layout from "./Layout/Layout";
 import MovieDetail from "./views/MovieDetail";
-import Login from "./views/Login";
-import Register from "./views/Register";
+import Register from "./views/Auth/Register";
+import Login from "./views/Auth/Login";
+import AddLayout from "./views/Add/AddLayout";
+import Choose from "./views/Add/Choose";
+import AddMovie from "./views/Add/AddMovie";
 
 const router = createBrowserRouter([
     {
@@ -42,6 +45,20 @@ const router = createBrowserRouter([
                 path: '/register',
                 element: <Register />
             },
+            {
+                path: '/add',
+                element: <AddLayout />,
+                children: [
+                    {
+                        path: '/add',
+                        element: <Choose />
+                    },
+                    {
+                        path: '/add/movie',
+                        element: <AddMovie />
+                    }
+                ]
+            }
         ]
     },
     

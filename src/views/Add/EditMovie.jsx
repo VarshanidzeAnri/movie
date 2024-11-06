@@ -7,28 +7,16 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from 'react-select'
 import dayjs from "dayjs";
+import axios from "axios";
 
 function EditMovie() {
     const {id} = useParams();
     const [movie, setMovie] = useState({})
-    let defaultGenre = [];
-    const defaultDirector = [];
-    const defaultActor = [];
     
-    useEffect(() => {
-        axiosClient.get(`/movie/${id}`)
-        .then(({data}) => setMovie(data.data))
-    }, []);
-
-    movie.genres?.map(genre => defaultGenre.push({value: genre.id, label: genre.name}))
-
-    console.log(defaultGenre)
-
     const navigate = useNavigate();
     const [genres, setGenres] = useState([]);
     const [directors, setDirectors] = useState([]);
     const [actors, setActors] = useState([]);
-    const [movieType, setMovieType] = useState(0);
     const [smallImg, setSmallImg] = useState([])
     const [longImg, setLongImg] = useState([])
     const [release, setRelease] = useState(null)
@@ -36,11 +24,9 @@ function EditMovie() {
     const [selectedDirectors, setSelectedDirectors] = useState([]); 
     const [selectedActors, setSelectedActors] = useState([]); 
 
-
     const nameRef = useRef();
     const nameEnRef = useRef();
     const descriptionRef = useRef();
-
 
     useEffect(() => {
         axiosClient.get('/genres')
@@ -63,8 +49,27 @@ function EditMovie() {
                 actors.push({value: data.id, label: data.name})
             })
         })
+
+        const defaultGenreArr = [];
+        const defaultDirectorArr = [];
+        const defaultActorArr = [];
+        axiosClient.get(`/movie/${id}`)
+        .then(({data}) => {
+            setMovie(data.data)
+            data.data?.genres.map(genre => defaultGenreArr.push({value: genre.id, label: genre.name}))
+            data.data?.directors.map(dir => defaultDirectorArr.push({value: dir.id, label: dir.name}))
+            data.data?.actors.map(act => defaultActorArr.push({value: act.id, label: act.name}))
+            
+        })
+        setSmallImg(movie.small_img)
+        setLongImg(movie.long_img)
+        setSelectedGenres(defaultGenreArr)
+        setSelectedDirectors(defaultDirectorArr)
+        setSelectedActors(defaultActorArr)
         
     },[genres, directors, actors]);
+    
+    // console.log(movie)
 
 
     const submitForm = (e) => {
@@ -85,7 +90,6 @@ function EditMovie() {
         })
 
         const data = new FormData()
-        data.append('type', movieType);
         data.append('name', nameRef.current.value);
         data.append('name_en', nameEnRef.current.value);
         data.append('release_year', release);
@@ -94,26 +98,18 @@ function EditMovie() {
         data.append('genre_ids', JSON.stringify(genreArr));
         data.append('director_ids', JSON.stringify(directorArr));
         data.append('actor_ids', JSON.stringify(actorArr));
+        data.append('description', descriptionRef.current.value);
 
-        axiosClient.post('/movie/store', data)
+
+        axiosClient.post(`/movie/update/${id}`, data, {params: {'_method': 'PATCH'}})
         .then(() => {
-            navigate('/');
+            navigate(`/${id}`)
         });
     }
-
-    const options = [
-        { value: 'chocolate', label: 'Chocolate' },
-        { value: 'strawberry', label: 'Strawberry' },
-        { value: 'vanilla', label: 'Vanilla' }
-      ]
 
     return (
         <div className="w-[25vw] mx-auto">
             <form onSubmit={submitForm} className="flex flex-col items-start justify-center my-40">
-                <div className="flex justify-around items-center gap-5 mt-10 text-2xl w-full">
-                    <RadioButton onChangeType={setMovieType} />
-                </div>
-
                 <div className="flex justify-center items-center gap-5 mt-10">
                     <div className="flex w-60 flex-col gap-3">
                         <label>პატარა ფოტო (500x700)</label>
@@ -121,7 +117,7 @@ function EditMovie() {
                     </div>
                     <div className="flex flex-col w-60 gap-3 ">
                         <label>დიდი ფოტო (1200x600)</label>
-                        <input onChange={(e) => setLongImg(e.target.files[0])}   type="file" />
+                        <input onChange={(e) => setLongImg(e.target.files[0])} type="file" />
                     </div>
                 </div>
                 <div className="flex justify-center items-center gap-5 mt-10">
@@ -140,7 +136,7 @@ function EditMovie() {
                         <div className=''>
                         <LocalizationProvider dateAdapter={AdapterDayjs} > 
                         <DemoContainer components={['DatePicker']} >
-                            <DatePicker defaultValue={dayjs(movie.year)} label="გამოშვების წელი" className='bg-white' views={['year']}  onChange={(e) => setRelease(e.year())} />
+                            <DatePicker value={dayjs(movie.year)} label="გამოშვების წელი" className='bg-white' views={['year']}  onChange={(e) => setRelease(e.year())} />
                         </DemoContainer>
                         </LocalizationProvider>
                         </div>
@@ -152,7 +148,7 @@ function EditMovie() {
                         <label>ჟანრი</label>
                         <Select
                         onChange={(e) =>  setSelectedGenres(e)}
-                        defaultValue={defaultGenre}
+                        value={selectedGenres.length > 0 && selectedGenres}
                         isMulti
                         name="colors"
                         options={genres}
@@ -167,6 +163,7 @@ function EditMovie() {
                         <label>რეჟისორი</label>
                         <Select
                         onChange={(e) => setSelectedDirectors(e)}
+                        value={selectedDirectors.length > 0 && selectedDirectors}
                         isMulti
                         name="colors"
                         options={directors}
@@ -181,6 +178,7 @@ function EditMovie() {
                         <label>მსახიობები</label>
                         <Select
                         onChange={(e) => setSelectedActors(e)}
+                        value={selectedActors.length > 0 && selectedActors}
                         isMulti
                         name="colors"
                         options={actors}

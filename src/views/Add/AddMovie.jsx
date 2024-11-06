@@ -21,13 +21,9 @@ function AddMovie() {
     const [selectedGenres, setSelectedGenres] = useState([]); 
     const [selectedDirectors, setSelectedDirectors] = useState([]); 
     const [selectedActors, setSelectedActors] = useState([]); 
-
-
     const nameRef = useRef();
     const nameEnRef = useRef();
     const descriptionRef = useRef();
-
-
 
     useEffect(() => {
         axiosClient.get('/genres')
@@ -71,9 +67,6 @@ function AddMovie() {
             actorArr.push(genre.value)
         })
 
-        
-
-
         const data = new FormData()
         data.append('type', movieType);
         data.append('name', nameRef.current.value);
@@ -84,13 +77,12 @@ function AddMovie() {
         data.append('genre_ids', JSON.stringify(genreArr));
         data.append('director_ids', JSON.stringify(directorArr));
         data.append('actor_ids', JSON.stringify(actorArr));
+        data.append('description', descriptionRef.current.value);
 
         axiosClient.post('/movie/store', data)
         .then(({data}) => {
             navigate(`/${data.id}`)
         });
-
-
     }
 
     return (

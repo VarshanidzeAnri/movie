@@ -11,6 +11,7 @@ import Login from "./views/Auth/Login";
 import AddLayout from "./views/Add/AddLayout";
 import Choose from "./views/Add/Choose";
 import AddMovie from "./views/Add/AddMovie";
+import EditMovie from "./views/Add/EditMovie";
 
 const router = createBrowserRouter([
     {
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
                 element: <Animes />
             },
             {
-                path: '/:slug',
+                path: '/:id',
                 element: <MovieDetail />
             },
             {
@@ -58,7 +59,17 @@ const router = createBrowserRouter([
                         element: <AddMovie />
                     }
                 ]
-            }
+            },
+            {
+                path: '/edit',
+                element: <AddLayout />,
+                children: [
+                    {
+                        path: '/edit/:id',
+                        element: <EditMovie />
+                    }
+                ]
+            },
         ]
     },
     

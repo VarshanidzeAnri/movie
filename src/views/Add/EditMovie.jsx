@@ -1,15 +1,29 @@
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import RadioButton from "../../components/RadioButton";
+import axiosClient from "../../axios-clinet";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Select from 'react-select'
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useEffect, useRef, useState } from 'react';
-import axiosClient from '../../axios-clinet';
-import RadioButton from '../../components/RadioButton';
-import { useNavigate } from 'react-router-dom';
+import dayjs from "dayjs";
 
+function EditMovie() {
+    const {id} = useParams();
+    const [movie, setMovie] = useState({})
+    let defaultGenre = [];
+    const defaultDirector = [];
+    const defaultActor = [];
+    
+    useEffect(() => {
+        axiosClient.get(`/movie/${id}`)
+        .then(({data}) => setMovie(data.data))
+    }, []);
 
-function AddMovie() {
+    movie.genres?.map(genre => defaultGenre.push({value: genre.id, label: genre.name}))
+
+    console.log(defaultGenre)
+
     const navigate = useNavigate();
     const [genres, setGenres] = useState([]);
     const [directors, setDirectors] = useState([]);
@@ -26,7 +40,6 @@ function AddMovie() {
     const nameRef = useRef();
     const nameEnRef = useRef();
     const descriptionRef = useRef();
-
 
 
     useEffect(() => {
@@ -71,9 +84,6 @@ function AddMovie() {
             actorArr.push(genre.value)
         })
 
-        
-
-
         const data = new FormData()
         data.append('type', movieType);
         data.append('name', nameRef.current.value);
@@ -86,22 +96,26 @@ function AddMovie() {
         data.append('actor_ids', JSON.stringify(actorArr));
 
         axiosClient.post('/movie/store', data)
-        .then(({data}) => {
-            navigate(`/${data.id}`)
+        .then(() => {
+            navigate('/');
         });
-
-
     }
 
+    const options = [
+        { value: 'chocolate', label: 'Chocolate' },
+        { value: 'strawberry', label: 'Strawberry' },
+        { value: 'vanilla', label: 'Vanilla' }
+      ]
+
     return (
-        <div className="w-[90vw] lg:w-[25vw] mx-auto">
-            <form onSubmit={submitForm} className="flex flex-col items-center lg:items-start justify-center my-40">
+        <div className="w-[25vw] mx-auto">
+            <form onSubmit={submitForm} className="flex flex-col items-start justify-center my-40">
                 <div className="flex justify-around items-center gap-5 mt-10 text-2xl w-full">
                     <RadioButton onChangeType={setMovieType} />
                 </div>
 
-                <div className="flex flex-col lg:flex-row justify-center items-center gap-5 mt-20">
-                    <div className="flex  w-60 flex-col gap-3">
+                <div className="flex justify-center items-center gap-5 mt-10">
+                    <div className="flex w-60 flex-col gap-3">
                         <label>პატარა ფოტო (500x700)</label>
                         <input onChange={(e) => setSmallImg(e.target.files[0])} type="file" />
                     </div>
@@ -110,14 +124,14 @@ function AddMovie() {
                         <input onChange={(e) => setLongImg(e.target.files[0])}   type="file" />
                     </div>
                 </div>
-                <div className="flex flex-col lg:flex-row justify-center items-center gap-5 mt-10">
+                <div className="flex justify-center items-center gap-5 mt-10">
                     <div className="flex flex-col gap-3 w-60">
                         <label>სახელი (ქართულად)</label>
-                        <input ref={nameRef} className="text-black p-2 rounded-lg" type="text" />
+                        <input ref={nameRef} defaultValue={movie.name} className="text-black p-2 rounded-lg" type="text" />
                     </div>
                     <div className="flex flex-col w-60 gap-3">
                         <label>სახელი (ინგლისურად)</label>
-                        <input ref={nameEnRef} className="text-black p-2 rounded-lg" type="text" />
+                        <input ref={nameEnRef} defaultValue={movie.name_en} className="text-black p-2 rounded-lg" type="text" />
                     </div>
                 </div>
                 <div className="flex justify-start items-center gap-20 mt-10 ">
@@ -126,7 +140,7 @@ function AddMovie() {
                         <div className=''>
                         <LocalizationProvider dateAdapter={AdapterDayjs} > 
                         <DemoContainer components={['DatePicker']} >
-                            <DatePicker  label="გამოშვების წელი" className='bg-white' views={['year']}  onChange={(e) => setRelease(e.year())} />
+                            <DatePicker defaultValue={dayjs(movie.year)} label="გამოშვების წელი" className='bg-white' views={['year']}  onChange={(e) => setRelease(e.year())} />
                         </DemoContainer>
                         </LocalizationProvider>
                         </div>
@@ -138,6 +152,7 @@ function AddMovie() {
                         <label>ჟანრი</label>
                         <Select
                         onChange={(e) =>  setSelectedGenres(e)}
+                        defaultValue={defaultGenre}
                         isMulti
                         name="colors"
                         options={genres}
@@ -176,9 +191,9 @@ function AddMovie() {
                 </div>
 
                 <div className="flex justify-start items-center gap-20 mt-10">
-                    <div className="flex flex-col gap-3 w-[80vw] md:w-[40vw] lg:w-[25vw] ">
+                    <div className="flex flex-col gap-3 w-[25vw] ">
                         <label>მოკლე აღწერა</label>
-                        <textarea ref={descriptionRef}  className='w-full h-40 text-black p-2'></textarea>
+                        <textarea ref={descriptionRef} defaultValue={movie.description}  className='w-full h-40 text-black p-2'></textarea>
                     </div>
                 </div>
                 <div className='w-[80%] ml-5 bg-red-600 mt-20 p-2 text-center rounded-lg'>
@@ -189,4 +204,4 @@ function AddMovie() {
     )
 }
 
-export default AddMovie
+export default EditMovie

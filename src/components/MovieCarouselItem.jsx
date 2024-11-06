@@ -11,19 +11,19 @@ function MovieCarouselItem({movie}) {
     return (
                     <>
                     <div className='relative'>
-                            <Link onClick={handleLinkClick} to={`/${movie.slug}`}>
+                            <Link onClick={handleLinkClick} to={`/${movie.id}`}>
                             <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className={`text-7xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white opacity-100 ${!isHovered && 'hidden'}`}><HiOutlinePlayCircle /></div>
-                            <img src={movie.image} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}  className={`w-full h-[20vh] sm:h-[30vh] object-cover rounded-lg ${isHovered && 'border-2 border-[#ff0009]'} `} /></Link>\
+                            <img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${movie.small_img}`} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}  className={`w-full h-[20vh] sm:h-[30vh] object-cover rounded-lg ${isHovered && 'border-2 border-[#ff0009]'} `} /></Link>\
                             <div className='absolute bottom-0 w-full bg-black opacity-70 rounded-b-lg text-white'>
-                                <div className='flex justify-between text-xs lg:text-xl lg:w-[90%] mx-auto '>
+                                <div className='flex justify-between text-xs lg:text-xl lg:w-[90%] mx-auto'>
                                     <div>GEO</div>
                                     <div className='opacity-30'>RUS</div>
                                     <div>ENG</div>
                                 </div>
                             </div>
-                            <div className='absolute top-0 right-0 p-1 bg-black opacity-70 rounded-md text-white'>2024</div>
+                            <div className='absolute top-0 right-0 p-1 bg-black opacity-70 rounded-md text-white'>{movie.release_year}</div>
                         </div>                    
-                        <div className='ml-1'>
+                        <div className='ml-1 break-all'>
                             <div className='text-xl'>{movie.name}</div>
                             <div>{movie.name_en}</div>
                         </div>

@@ -116,7 +116,7 @@ function MovieDetail() {
                         <div>{movie.description}</div>
                     </div>
                 </div>
-                <Comments />
+                <Comments movieId={id} />
                 <div>
                 </div>
         </div>

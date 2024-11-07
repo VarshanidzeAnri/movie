@@ -5,6 +5,7 @@ import './comments.css'
 function Comments({movieId}) {
     const [comments, setComments] = useState([]);
     const commentRef = useRef();
+    const [deleteCommentId, setDeleteCommentId] = useState(null);
 
     useEffect(() => {
         axiosClient.get(`comments/movie/${movieId}`)
@@ -25,21 +26,36 @@ function Comments({movieId}) {
         })
     }
 
+    const deleteComment = (e) => {
+        e.preventDefault()
+        axiosClient.delete(`comment/delete/${deleteCommentId}`)
+        .then(() => {
+            window.location.reload();
+        })
+    }
+
     return (
         <div className='bg-zinc-800 p-5 comments'>
-                    <div className='flex justify-between mt-2'>
-                        <div className='flex flex-col gap-5 w-[45%] overflow-auto h-72 '>
+                    <div className='flex flex-col-reverse md:flex-row justify-between mt-2'>
+                        <div className='flex flex-col gap-5 w-full md:w-[45%] overflow-auto h-72 mt-10 md:mt-0'>
                         <div className='text-xl '>კომენტარები</div>
                         {comments.map(comment => (
                                 <div key={comment.id}>
-                                    <div className='border-black border-r-0 border-2 p-3 flex flex-col flex-wrap break-all'>
-                                        <div className='text-sm '>{comment.user.name}</div>
-                                        <div className='text-lg'>{comment.comment}</div>
+                                    <div className='border-black border-r-0 border-2 p-3 flex justify-between items-center'>
+                                        <div className='flex flex-col flex-wrap break-all'>
+                                            <div className='text-sm '>{comment.user.name}</div>
+                                            <div className='text-lg'>{comment.comment}</div>
+                                        </div>
+                                        <div>
+                                            <form onSubmit={deleteComment} className='bg-[#ff0009] p-3'>
+                                                <button onClick={() => setDeleteCommentId(comment.id)} type='submit'>წაშლა</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                        <div className='w-[50%]'>
+                        <div className='w-full md:w-[50%]'>
                             <form onSubmit={createComments} className='flex flex-col gap-3 '>
                                 <div className='text-xl '>კომენტარის დაწერა</div>
                                 <div ><textarea ref={commentRef} className='w-full h-40 rounded-lg p-2 text-black' placeholder="კომენტარი..."></textarea></div>

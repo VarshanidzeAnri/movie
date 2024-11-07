@@ -6,6 +6,7 @@ const StateContext = createContext({
     setToken: () => {},
     setUserRole: () => {},
     removeToken: () => {},
+    handleMoveTop: () => {},
 })
 
 export const ContextProvider = ({children}) => {
@@ -29,12 +30,17 @@ export const ContextProvider = ({children}) => {
         localStorage.removeItem("USER_ROLE")
     }
 
+    function handleMoveTop() {
+        window.scrollTo({ top: 0 });
+      }
+
     return <StateContext.Provider value={{
         token,
         userRole,
         setToken,
         setUserRole,
         removeToken,
+        handleMoveTop,
     }}>
         {children}
     </StateContext.Provider>

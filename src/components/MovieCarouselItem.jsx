@@ -1,17 +1,17 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { HiOutlinePlayCircle } from "react-icons/hi2";
+import { useStateContext } from "../contexts/ContextProvider";
 
 
 function MovieCarouselItem({movie}) {
-    function handleLinkClick() {
-        window.scrollTo({ top: 0 });
-      }
+    const { handleMoveTop} = useStateContext();
+    
     const [isHovered, setIsHovered] = useState(false)
     return (
                     <>
                     <div className='relative'>
-                            <Link onClick={handleLinkClick} to={`/${movie.id}`}>
+                            <Link onClick={handleMoveTop} to={`/${movie.id}`}>
                             <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className={`text-7xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white opacity-100 ${!isHovered && 'hidden'}`}><HiOutlinePlayCircle /></div>
                             <img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${movie.small_img}`} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}  className={`w-full h-[20vh] sm:h-[30vh] object-cover rounded-lg ${isHovered && 'border-2 border-[#ff0009]'} `} /></Link>\
                             <div className='absolute bottom-0 w-full bg-black opacity-70 rounded-b-lg text-white'>

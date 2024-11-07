@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Select from 'react-select'
 import dayjs from "dayjs";
 import axios from "axios";
+import { RiFileUploadLine } from "react-icons/ri";
 
 function EditMovie() {
     const {id} = useParams();
@@ -17,8 +18,8 @@ function EditMovie() {
     const [genres, setGenres] = useState([]);
     const [directors, setDirectors] = useState([]);
     const [actors, setActors] = useState([]);
-    const [smallImg, setSmallImg] = useState([])
-    const [longImg, setLongImg] = useState([])
+    const [smallImg, setSmallImg] = useState('')
+    const [longImg, setLongImg] = useState('')
     const [release, setRelease] = useState(null)
     const [selectedGenres, setSelectedGenres] = useState([]); 
     const [selectedDirectors, setSelectedDirectors] = useState([]); 
@@ -27,6 +28,7 @@ function EditMovie() {
     const nameRef = useRef();
     const nameEnRef = useRef();
     const descriptionRef = useRef();
+    console.log(smallImg)
 
     useEffect(() => {
         axiosClient.get('/genres')
@@ -61,18 +63,19 @@ function EditMovie() {
             data.data?.actors.map(act => defaultActorArr.push({value: act.id, label: act.name}))
             
         })
-        setSmallImg(movie.small_img)
-        setLongImg(movie.long_img)
+        
+       
         setSelectedGenres(defaultGenreArr)
         setSelectedDirectors(defaultDirectorArr)
         setSelectedActors(defaultActorArr)
-        
-    },[genres, directors, actors]);
+        setRelease(movie.release_year)
+    },[genres, directors, actors, movie.long_img]);
+
     
-    // console.log(movie)
-
-
+    
+    
     const submitForm = (e) => {
+        console.log(smallImg)
         e.preventDefault();
         let genreArr = []
         selectedGenres.map(genre => {
@@ -110,14 +113,20 @@ function EditMovie() {
     return (
         <div className="w-[25vw] mx-auto">
             <form onSubmit={submitForm} className="flex flex-col items-start justify-center my-40">
-                <div className="flex justify-center items-center gap-5 mt-10">
-                    <div className="flex w-60 flex-col gap-3">
-                        <label>პატარა ფოტო (500x700)</label>
-                        <input onChange={(e) => setSmallImg(e.target.files[0])} type="file" />
+            <div className="flex flex-col justify-center items-center gap-10 mt-20 w-[100%]">
+                    <div className="flex w-[40%]  flex-col gap-3 bg-white h-68">
+                            <label htmlFor='small_img' className=' text-black flex flex-col justify-center items-center w-full h-full'>
+                            {smallImg ? <img className='w-full h-full object-cover' src={URL.createObjectURL(smallImg)} /> : <img className='w-full h-full object-cover' src={`${import.meta.env.VITE_API_BASE_URL}/storage/${movie.small_img}`} />}
+                        </label>
+                        
+                        <input className='hidden' id='small_img' onChange={(e) => setSmallImg(e.target.files[0])} type="file" accept="image/png, image/jpeg" />
                     </div>
-                    <div className="flex flex-col w-60 gap-3 ">
-                        <label>დიდი ფოტო (1200x600)</label>
-                        <input onChange={(e) => setLongImg(e.target.files[0])} type="file" />
+
+                    <div className="flex w-full flex-col gap-3 bg-white h-60">
+                    <label htmlFor='long_img' className=' text-black flex flex-col justify-center items-center w-full h-full'>
+                            {longImg ? <img className='w-full h-full object-cover' src={URL.createObjectURL(longImg)} /> : <img className='w-full h-full object-cover' src={`${import.meta.env.VITE_API_BASE_URL}/storage/${movie.long_img}`} />}
+                        </label>
+                        <input className='hidden' id='long_img' onChange={(e) => setLongImg(e.target.files[0])} type="file" accept="image/png, image/jpeg" />
                     </div>
                 </div>
                 <div className="flex justify-center items-center gap-5 mt-10">
@@ -135,8 +144,8 @@ function EditMovie() {
                         <label>გამოშვების წელი</label>
                         <div className=''>
                         <LocalizationProvider dateAdapter={AdapterDayjs} > 
-                        <DemoContainer components={['DatePicker']} >
-                            <DatePicker value={dayjs(movie.year)} label="გამოშვების წელი" className='bg-white' views={['year']}  onChange={(e) => setRelease(e.year())} />
+                        <DemoContainer components={['DatePicker']}>
+                            <DatePicker value={dayjs(release)} label="გამოშვების წელი" className='bg-white' views={['year']}  onChange={(e) => setRelease(e.year())} />
                         </DemoContainer>
                         </LocalizationProvider>
                         </div>

@@ -47,7 +47,7 @@ function MovieDetail() {
                     <div className="flex justify-start gap-2 mt-1">
                         <div className="hidden md:block lg:hidden w-full"><img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${movie.small_img}`} className=" h-full object-cover rounded-md" /></div>
                         <div className="flex flex-col justify-start gap-3 text-sm">
-                            <div>წელი: {movie.year}</div>
+                            <div>წელი: {movie.release_year}</div>
                             <div className='flex gap-2'>
                                 <span>ჟანრი:</span> 
                                 <div className='flex gap-2'>

@@ -13,7 +13,7 @@ import axiosClient from "../axios-clinet";
 
 
 function Header() {
-  const {token, removeToken} = useStateContext();
+  const {token, removeToken, handleMoveTop} = useStateContext();
   let [isOpenUserIcon, setIsOpenUserIcon] = useState(false);
   let [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { pathname } = useResolvedPath()
@@ -32,11 +32,6 @@ function Header() {
   })
   }
 
-
-
-  function handleLinkClick() {
-    window.scrollTo({ top: 0 });
-  }
   return (
     <header className=" bg-zinc-900 fixed top-0 w-full z-50">
 
@@ -44,14 +39,14 @@ function Header() {
       {/* <div className=""> */}
         {/* <div className="flex justify-between items-center w-[90%] mx-auto p-5  "> */}
 
-      <Link onClick={handleLinkClick} to='/'  className="logo_full"><img src={logo}  className="w-full h-full object-cover"/></Link>
+      <Link onClick={handleMoveTop} to='/'  className="logo_full"><img src={logo}  className="w-full h-full object-cover"/></Link>
 
-      <Link onClick={handleLinkClick} to='/' className="logo_mobile w-24 h-10 "><img src={logo2}  className="w-full h-full object-cover"/></Link>
+      <Link onClick={handleMoveTop} to='/' className="logo_mobile w-24 h-10 "><img src={logo2}  className="w-full h-full object-cover"/></Link>
         <div className="hidden lg:flex min-w-[25%] justify-between border-[#ff0009] border-2 py-5 px-1 rounded-2xl bg-black  ">
-          <Link onClick={handleLinkClick} to='/' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/' && 'bg-[#ff0009] '}`}>მთავარი</Link>
-          <Link onClick={handleLinkClick} to='/movies' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/movies' && 'bg-[#ff0009] '}`}>ფილმები</Link>
-          <Link onClick={handleLinkClick} to='/serials' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/serials' && 'bg-[#ff0009] '}`}>სერიალები</Link>
-          <Link onClick={handleLinkClick} to='animes' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/animes' && 'bg-[#ff0009] '}`}>ანიმეები</Link>
+          <Link onClick={handleMoveTop} to='/' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/' && 'bg-[#ff0009] '}`}>მთავარი</Link>
+          <Link onClick={handleMoveTop} to='/movies' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/movies' && 'bg-[#ff0009] '}`}>ფილმები</Link>
+          <Link onClick={handleMoveTop} to='/serials' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/serials' && 'bg-[#ff0009] '}`}>სერიალები</Link>
+          <Link onClick={handleMoveTop} to='animes' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/animes' && 'bg-[#ff0009] '}`}>ანიმეები</Link>
         </div>
         <div className="hidden lg:flex items-center justify-end gap-5 lg:w-[15vw] xl:w-[20vw]">
           <div className=" flex justify-start">

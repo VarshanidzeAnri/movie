@@ -2,18 +2,17 @@ import { Link } from 'react-router-dom'
 import './movieItem.css'
 import { useState } from 'react';
 import { HiOutlinePlayCircle } from "react-icons/hi2";
+import { useStateContext } from '../contexts/ContextProvider';
 
 
 function MovieItem({movie}) {
     const [isHovered, setIsHovered] = useState(false)
+    const {handleMoveTop} = useStateContext();
 
-    function handleLinkClick() {
-        window.scrollTo({ top: 0 });
-      }
     return (
         <div key={movie.id} className="single-movie-item-ddss">
                             <div className='relative'>
-                            <Link onClick={handleLinkClick} to={`/${movie.slug}`}>
+                            <Link onClick={handleMoveTop} to={`/${movie.slug}`}>
                             <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className={`text-7xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-100  ${!isHovered && 'hidden'} `}><HiOutlinePlayCircle /></div>
 
                             <img src={movie.image} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className={`w-full h-[20vh] sm:h-[30vh] object-cover rounded-lg ${isHovered && 'border-2 border-[#ff0009]'}`} />

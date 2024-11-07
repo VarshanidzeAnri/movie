@@ -7,6 +7,8 @@ import { useEffect, useRef, useState } from 'react';
 import axiosClient from '../../axios-clinet';
 import RadioButton from '../../components/RadioButton';
 import { useNavigate } from 'react-router-dom';
+import { RiFileUploadLine } from "react-icons/ri";
+
 
 
 function AddMovie() {
@@ -15,8 +17,8 @@ function AddMovie() {
     const [directors, setDirectors] = useState([]);
     const [actors, setActors] = useState([]);
     const [movieType, setMovieType] = useState(0);
-    const [smallImg, setSmallImg] = useState([])
-    const [longImg, setLongImg] = useState([])
+    const [smallImg, setSmallImg] = useState('')
+    const [longImg, setLongImg] = useState('')
     const [release, setRelease] = useState(null)
     const [selectedGenres, setSelectedGenres] = useState([]); 
     const [selectedDirectors, setSelectedDirectors] = useState([]); 
@@ -24,6 +26,8 @@ function AddMovie() {
     const nameRef = useRef();
     const nameEnRef = useRef();
     const descriptionRef = useRef();
+
+    console.log(smallImg)
 
     useEffect(() => {
         axiosClient.get('/genres')
@@ -92,14 +96,32 @@ function AddMovie() {
                     <RadioButton onChangeType={setMovieType} />
                 </div>
 
-                <div className="flex flex-col lg:flex-row justify-center items-center gap-5 mt-20">
-                    <div className="flex  w-60 flex-col gap-3">
-                        <label>პატარა ფოტო (500x700)</label>
-                        <input onChange={(e) => setSmallImg(e.target.files[0])} type="file" />
+                <div className="flex flex-col justify-center items-center gap-10 mt-20 w-[100%]">
+                    <div className="flex w-[40%]  flex-col gap-3 bg-white h-68">
+                            <label htmlFor='small_img' className=' text-black flex flex-col justify-center items-center w-full h-full'>
+                            {smallImg ? <img className='w-full h-full object-cover' src={URL.createObjectURL(smallImg)} /> : (
+                                <div className='flex flex-col justify-center items-center  h-full p-3'>
+                                <span>პატარა ფოტო </span>
+                                <span>(500x700)</span>
+                                <div className='text-9xl'><RiFileUploadLine /></div>
+                            </div>
+                            )}
+                        </label>
+                        
+                        <input className='hidden' id='small_img' onChange={(e) => setSmallImg(e.target.files[0])} type="file" accept="image/png, image/jpeg"  />
                     </div>
-                    <div className="flex flex-col w-60 gap-3 ">
-                        <label>დიდი ფოტო (1200x600)</label>
-                        <input onChange={(e) => setLongImg(e.target.files[0])}   type="file" />
+
+                    <div className="flex w-full flex-col gap-3 bg-white h-60">
+                    <label htmlFor='long_img' className=' text-black flex flex-col justify-center items-center w-full h-full'>
+                            {longImg ? <img className='w-full h-full object-cover' src={URL.createObjectURL(longImg)} /> : (
+                                <div className='flex flex-col justify-center items-center'>
+                                <span>პატარა ფოტო </span>
+                                <span>(1200x600)</span>
+                                <div className='text-9xl'><RiFileUploadLine /></div>
+                            </div>
+                            )}
+                        </label>
+                        <input className='hidden' id='long_img' onChange={(e) => setLongImg(e.target.files[0])} type="file" accept="image/png, image/jpeg" />
                     </div>
                 </div>
                 <div className="flex flex-col lg:flex-row justify-center items-center gap-5 mt-10">

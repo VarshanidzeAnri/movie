@@ -32,7 +32,6 @@ function MainFilter() {
         const languageData = Array.from(languageSet)
         const yearSet = new Set(movieYears);
         const yearData = Array.from(yearSet)
-        console.log(yearData)
         let path = `${pathname}?checked=${checkedData.toString()}&year=${yearData.toString()}&from=${fromRef.current.value}&to=${toRef.current.value}&lang=${languageData.toString()}`;
         navigate(path)
         

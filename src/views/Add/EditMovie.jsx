@@ -28,7 +28,6 @@ function EditMovie() {
     const nameRef = useRef();
     const nameEnRef = useRef();
     const descriptionRef = useRef();
-    console.log(smallImg)
 
     useEffect(() => {
         axiosClient.get('/genres')
@@ -69,13 +68,12 @@ function EditMovie() {
         setSelectedDirectors(defaultDirectorArr)
         setSelectedActors(defaultActorArr)
         setRelease(movie.release_year)
-    },[genres, directors, actors, movie.long_img]);
+    },[genres, directors, actors, movie.release_year]);
 
     
     
     
     const submitForm = (e) => {
-        console.log(smallImg)
         e.preventDefault();
         let genreArr = []
         selectedGenres.map(genre => {
@@ -103,7 +101,6 @@ function EditMovie() {
         data.append('actor_ids', JSON.stringify(actorArr));
         data.append('description', descriptionRef.current.value);
 
-
         axiosClient.post(`/movie/update/${id}`, data, {params: {'_method': 'PATCH'}})
         .then(() => {
             navigate(`/${id}`)
@@ -111,8 +108,8 @@ function EditMovie() {
     }
 
     return (
-        <div className="w-[25vw] mx-auto">
-            <form onSubmit={submitForm} className="flex flex-col items-start justify-center my-40">
+        <div className="w-[90vw] lg:w-[25vw] mx-auto">
+            <form onSubmit={submitForm} className="flex flex-col items-center lg:items-start justify-center my-40">
             <div className="flex flex-col justify-center items-center gap-10 mt-20 w-[100%]">
                     <div className="flex w-[40%]  flex-col gap-3 bg-white h-68">
                             <label htmlFor='small_img' className=' text-black flex flex-col justify-center items-center w-full h-full'>
@@ -145,7 +142,7 @@ function EditMovie() {
                         <div className=''>
                         <LocalizationProvider dateAdapter={AdapterDayjs} > 
                         <DemoContainer components={['DatePicker']}>
-                            <DatePicker value={dayjs(release)} label="გამოშვების წელი" className='bg-white' views={['year']}  onChange={(e) => setRelease(e.year())} />
+                            <DatePicker value={dayjs(movie.release_year)} label="გამოშვების წელი" className='bg-white' views={['year']}  onChange={(e) => setRelease(e.year())} />
                         </DemoContainer>
                         </LocalizationProvider>
                         </div>

@@ -115,7 +115,7 @@ function AddMovie() {
                     <label htmlFor='long_img' className=' text-black flex flex-col justify-center items-center w-full h-full'>
                             {longImg ? <img className='w-full h-full object-cover' src={URL.createObjectURL(longImg)} /> : (
                                 <div className='flex flex-col justify-center items-center'>
-                                <span>პატარა ფოტო </span>
+                                <span>დიდი ფოტო </span>
                                 <span>(1200x600)</span>
                                 <div className='text-9xl'><RiFileUploadLine /></div>
                             </div>

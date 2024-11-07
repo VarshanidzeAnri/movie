@@ -1,5 +1,5 @@
 
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { MOVIES } from '../../data';
 import Comments from '../components/Comments';
 import MoviesCarousel from '../components/MoviesCarousel';
@@ -10,13 +10,37 @@ import axiosClient from '../axios-clinet';
 function MovieDetail() {
     const {id} = useParams();
     const [movie, setMovie] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         axiosClient.get(`/movie/${id}`)
         .then(({data}) => setMovie(data.data));
     }, [])
 
-    console.log(movie)
+    const deleteMovie = (e) => {
+        e.preventDefault();
+        axiosClient.delete(`/movie/delete/${id}`)
+        .then(() => {
+            navigate('/');
+        })
+    }
+
+    const updateToPublic = (e) => {
+        e.preventDefault();
+        axiosClient.patch(`/movie/update/public/${id}`)
+        .then(() => {
+            window.location.reload();
+        })
+    }
+
+    const updateToPrivate = (e) => {
+        e.preventDefault();
+        axiosClient.patch(`/movie/update/private/${id}`)
+        .then(() => {
+            window.location.reload();
+        })
+    }
+
 
     
 
@@ -35,9 +59,16 @@ function MovieDetail() {
             <div className="flex flex-col gap-2 md:gap-3 p-5 pt-2 bg-zinc-800 w-full rounded-md relative">
                 {Object.keys(movie).length !== 0 && !movie.access ? <div className='mt-5 text-[#ff0009]'>დაემატება დადასტურების შემდეგ</div> : ''}
                 <div className='md:absolute md:top-3 top-5 right-3 flex gap-3'>
-                    <div className='bg-[#ff0009] p-3 mt-5 md:mt-0'>
+                    <form onClick={movie.access == 1 ? updateToPrivate : updateToPublic} className='bg-[#ff0009] p-3 mt-5 md:mt-0 rounded'>
+                        <button type='submit'>{movie.access == 1 ? 'დამალვა' : 'გასაჯაროვება'}</button>
+                    </form>
+                    
+                    <div className='bg-[#ff0009] p-3 mt-5 md:mt-0 rounded'>
                         <Link to={`/edit/${movie.id}`}>რედაქტირება</Link>
                     </div>
+                    <form onClick={deleteMovie} className='bg-[#ff0009] p-3 mt-5 md:mt-0 rounded'>
+                        <button type='submit'>წაშლა</button>
+                    </form>
                 </div>
                     <div className='w-[70%] break-all'>
                         <div className="text-2xl mt-2">{movie.name}</div>

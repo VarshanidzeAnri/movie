@@ -50,7 +50,10 @@ function MovieDetail() {
 
             <div className="w-full flex justify-start gap-3 mt-5 lg:mt-0">
                 <div className="hidden lg:block h-[50vh] w-[30%]"><img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${movie.small_img}`} className=" h-full object-cover rounded-md" /></div>
-                <div className="h-[30vh] md:h-[50vh] w-full lg:w-[70%]"><img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${movie.long_img}`} className="w-full h-full object-cover rounded-md" /></div>
+                <div className="h-[30vh] md:h-[50vh] w-full lg:w-[70%] relative">
+                    <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#ff0009] '>ფილმი მალე დაიდება</div>
+                    <img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${movie.long_img}`} className="w-full h-full object-cover rounded-md" />
+                    </div>
                 {/* <div className="h-[30vh] md:min-h-[70vh] lg:min-h-[50vh] w-full lg:w-full">
                     <VideoPlayer className='w-full h-full object-cover rounded-md' />
                 </div> */}

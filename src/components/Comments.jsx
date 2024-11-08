@@ -2,17 +2,25 @@ import { useEffect, useRef, useState } from 'react'
 import axiosClient from '../axios-clinet'
 import './comments.css'
 
+
+
+
 function Comments({movieId}) {
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState('');
     const [deleteCommentId, setDeleteCommentId] = useState(null);
 
-    useEffect(() => {
+
+    function getComments(){
         axiosClient.get(`comments/movie/${movieId}`)
         .then(({data}) => {
             setComments(data.data)
         })
-    }, [comments])
+    }
+
+    useEffect(() => {
+        getComments()
+    }, [comments.comment])
 
     const createComments = (e) => {
         e.preventDefault();
@@ -23,12 +31,16 @@ function Comments({movieId}) {
         axiosClient.post(`comment/store/${movieId}`, data)
         .then(() => {
             setComment('');
+            getComments();
         })
     }
 
     const deleteComment = (e) => {
         e.preventDefault()
         axiosClient.delete(`comment/delete/${deleteCommentId}`)
+        .then(() => {
+            getComments();
+        })
     }
 
     return (

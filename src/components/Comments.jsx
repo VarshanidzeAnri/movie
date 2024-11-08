@@ -4,7 +4,7 @@ import './comments.css'
 
 function Comments({movieId}) {
     const [comments, setComments] = useState([]);
-    const commentRef = useRef();
+    const [comment, setComment] = useState('');
     const [deleteCommentId, setDeleteCommentId] = useState(null);
 
     useEffect(() => {
@@ -12,26 +12,23 @@ function Comments({movieId}) {
         .then(({data}) => {
             setComments(data.data)
         })
-    }, [])
+    }, [comments])
 
     const createComments = (e) => {
         e.preventDefault();
         const data = {
-            comment: commentRef.current.value
+            comment: comment
         }
 
         axiosClient.post(`comment/store/${movieId}`, data)
         .then(() => {
-            window.location.reload();
+            setComment('');
         })
     }
 
     const deleteComment = (e) => {
         e.preventDefault()
         axiosClient.delete(`comment/delete/${deleteCommentId}`)
-        .then(() => {
-            window.location.reload();
-        })
     }
 
     return (
@@ -58,7 +55,7 @@ function Comments({movieId}) {
                         <div className='w-full md:w-[50%]'>
                             <form onSubmit={createComments} className='flex flex-col gap-3 '>
                                 <div className='text-xl '>კომენტარის დაწერა</div>
-                                <div ><textarea ref={commentRef} className='w-full h-40 rounded-lg p-2 text-black' placeholder="კომენტარი..."></textarea></div>
+                                <div ><textarea value={comment} onChange={(e) => setComment(e.target.value)} className='w-full h-40 rounded-lg p-2 text-black' placeholder="კომენტარი..."></textarea></div>
                                 <button type='submit' className='p-2 bg-[#ff0009] text-white'>ატვირთვა</button>
                             </form>
                         </div>

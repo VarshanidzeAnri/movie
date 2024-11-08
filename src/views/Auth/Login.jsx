@@ -24,7 +24,7 @@ function Login() {
 
         axiosClient.post('/login', data)
         .then(({data}) => {
-            setToken(data.token, data.role)
+            setToken(data.token)
         })
         .catch(err => {
             const response = err.response

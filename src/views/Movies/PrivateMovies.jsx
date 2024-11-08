@@ -1,20 +1,12 @@
-import MovieItem from "../components/MovieItem"
-
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
-import { MOVIES } from '../../data';
-import 'swiper/css/autoplay';
-import MainFilter from "../components/MainFilter";
 import { useEffect, useState } from "react";
-import axiosClient from "../axios-clinet";
+import axiosClient from "../../axios-clinet";
+import MainFilter from "../../components/MainFilter";
+import MovieItem from "../../components/MovieItem";
 
-
-function Movies() {
+function PrivateMovies() {
     const [movies, setMovies] = useState([]);
     useEffect(() => {
-        axiosClient.get('/movies')
+        axiosClient.get('/movies/private')
         .then(({data}) => {
             setMovies(data.data);
         })
@@ -23,7 +15,7 @@ function Movies() {
 
     return (
         <div className="w-[90vw] md:w-[70vw] mx-auto ">
-            <MainFilter />
+            {/* <MainFilter /> */}
             <div className="w-full flex justify-start gap-5 flex-wrap mt-20 ">
             {movies.map(movie => <MovieItem key={movie.id} movie={movie} />)}
             </div>
@@ -31,4 +23,4 @@ function Movies() {
     )
 }
 
-export default Movies
+export default PrivateMovies

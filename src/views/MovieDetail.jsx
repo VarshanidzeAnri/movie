@@ -58,7 +58,7 @@ function MovieDetail() {
 
             <div className="flex flex-col gap-2 md:gap-3 p-5 pt-2 bg-zinc-800 w-full rounded-md relative">
                 {Object.keys(movie).length !== 0 && !movie.access ? <div className='mt-5 text-[#ff0009]'>დაემატება დადასტურების შემდეგ</div> : ''}
-                <div className='md:absolute md:top-3 top-5 right-3 flex gap-3'>
+                <div className='md:absolute md:top-3 top-5 right-3 flex gap-3 flex-wrap'>
                     <form onClick={movie.access == 1 ? updateToPrivate : updateToPublic} className='bg-[#ff0009] p-3 mt-5 md:mt-0 rounded'>
                         <button type='submit'>{movie.access == 1 ? 'დამალვა' : 'გასაჯაროვება'}</button>
                     </form>

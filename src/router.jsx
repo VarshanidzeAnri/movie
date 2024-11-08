@@ -12,6 +12,8 @@ import AddLayout from "./views/Add/AddLayout";
 import Choose from "./views/Add/Choose";
 import AddMovie from "./views/Add/AddMovie";
 import EditMovie from "./views/Add/EditMovie";
+import MyMovies from "./views/Movies/MyMovies";
+import PrivateMovies from "./views/Movies/PrivateMovies";
 
 const router = createBrowserRouter([
     {
@@ -45,6 +47,14 @@ const router = createBrowserRouter([
             {
                 path: '/register',
                 element: <Register />
+            },
+            {
+                path: '/my/movies',
+                element: <MyMovies />
+            },
+            {
+                path: '/private/movies',
+                element: <PrivateMovies />
             },
             {
                 path: '/add',

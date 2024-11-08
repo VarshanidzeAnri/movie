@@ -58,6 +58,8 @@ function Header() {
            {isOpenUserIcon && token  && (
              <div className="absolute top-12 right-5 bg-black p-3 flex flex-col gap-2 w-40">
               <Link to='/add' onClick={() => setIsOpenUserIcon(is => !is)} className="p-2 cursor-pointer hover:bg-zinc-900">დამატება</Link>
+              <Link to='/my/movies' onClick={() => setIsOpenUserIcon(is => !is)} className="p-2 cursor-pointer hover:bg-zinc-900">ჩემი ფილმები</Link>
+              <Link to='/private/movies' onClick={() => setIsOpenUserIcon(is => !is)} className="p-2 cursor-pointer hover:bg-zinc-900">დამალული ფილმები</Link>
               <div  className="p-2 cursor-pointer hover:bg-zinc-900" onClick={logout}>გასვლა</div>
             </div>
            )}
@@ -80,8 +82,8 @@ function Header() {
           </div>
           {isSidebarOpen && (
             <div className="absolute left-0 top-20 w-[100vw] h-[100vh] z-50 bg-black">
-              <div className="flex flex-col  gap-5 mt-10 ml-10">
-              <div className="flex justify-start  ">
+              <div className="flex flex-col  gap-5 my-10 ml-10 overflow-auto h-[70%]">
+              <div className="flex justify-start ">
                     <input className="bg-white w-[70vw] p-2 outline-none rounded-l-xl text-black text-xl" placeholder="ძებნა..." />
                     <button className="bg-white text-[#ff0009] p-2 rounded-r-xl"><HiMagnifyingGlass /></button>
                   </div>
@@ -103,11 +105,17 @@ function Header() {
                   </div>
 
                   
-                  <div className="mt-10 flex flex-col gap-7 text-center">
+                  <div className="mt-10 flex flex-col gap-7 text-center ">
                   {token ? (
                     <>
                       <div className="bg-[#ff0009] p-2 rounded-xl text-white">
                       <Link  to='/add' onClick={() => setIsSidebarOpen(false)}>დამატება</Link>
+                      </div>
+                      <div className="bg-[#ff0009] p-2 rounded-xl text-white">
+                      <Link  to='/my/movies' onClick={() => setIsSidebarOpen(false)}>ჩემი ფილმები</Link>
+                      </div>
+                      <div className="bg-[#ff0009] p-2 rounded-xl text-white">
+                      <Link  to='/private/movies' onClick={() => setIsSidebarOpen(false)}>დამალული ფილმები</Link>
                       </div>
                       <div className="bg-[#ff0009] p-2 rounded-xl text-white">
                       <div onClick={logout} >გასვლა</div>

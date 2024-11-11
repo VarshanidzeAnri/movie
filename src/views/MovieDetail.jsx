@@ -6,16 +6,42 @@ import MoviesCarousel from '../components/MoviesCarousel';
 import VideoPlayer from '../components/VideoPlayer';
 import { useEffect, useState } from 'react';
 import axiosClient from '../axios-clinet';
+import { connect } from 'videodb';
 
-function MovieDetail() {
+
+
+ function MovieDetail() {
+
+
+    const conn = connect('sk-Ejk607B3SvPo2vSrim0wBvWdgiNQvNlaMHMXK9byvQA');
     const {id} = useParams();
     const [movie, setMovie] = useState({});
+    const [video, setVideo] = useState('')
     const navigate = useNavigate();
+
+
 
     useEffect(() => {
         axiosClient.get(`/movie/${id}`)
         .then(({data}) => setMovie(data.data));
+
+
+                conn.getCollections().then(coll => {
+                    
+                    coll[0].getVideo('m-b46fbe56-8c37-41dc-9c9c-b3928395be78')
+                    .then(vid => {
+                        
+                        setVideo(vid.play())
+                        // console.log(vid)
+                        // // while(video.length ){
+                        //     setVideo(vid.meta.playerUrl)
+                        // // }
+                    })
+                });
+            // }
+                
     }, [])
+
 
     const deleteMovie = (e) => {
         e.preventDefault();
@@ -40,23 +66,20 @@ function MovieDetail() {
             window.location.reload();
         })
     }
-
-
-    
-
+    // {debugger}
     return (
         <div className='pb-20'>
         <div className="w-[90%] lg:w-[70vw] mx-auto flex flex-col gap-5 mb-10">
 
             <div className="w-full flex justify-start gap-3 mt-5 lg:mt-0">
                 <div className="hidden lg:block h-[50vh] w-[30%]"><img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${movie.small_img}`} className=" h-full object-cover rounded-md" /></div>
-                <div className="h-[30vh] md:h-[50vh] w-full lg:w-[70%] relative">
-                    <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#ff0009] '>ფილმი მალე დაიდება</div>
-                    <img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${movie.long_img}`} className="w-full h-full object-cover rounded-md" />
-                    </div>
-                {/* <div className="h-[30vh] md:min-h-[70vh] lg:min-h-[50vh] w-full lg:w-full">
-                    <VideoPlayer className='w-full h-full object-cover rounded-md' />
-                </div> */}
+                {/* <div className="h-[30vh] md:h-[50vh] w-full lg:w-[70%] relative"> */}
+                    {/* <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#ff0009] '>ფილმი მალე დაიდება</div> */}
+                    {/* <img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${movie.long_img}`} className="w-full h-full object-cover rounded-md" /> */}
+                    {/* </div> */}
+                <div className="h-[30vh] md:min-h-[70vh] lg:min-h-[50vh] w-full lg:w-full">
+                    <VideoPlayer  className='w-full h-full object-cover rounded-md' video={video} />
+                </div>
             </div>
 
             <div className="flex flex-col gap-2 md:gap-3 p-5 pt-2 bg-zinc-800 w-full rounded-md relative">

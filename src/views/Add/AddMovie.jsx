@@ -27,8 +27,6 @@ function AddMovie() {
     const nameEnRef = useRef();
     const descriptionRef = useRef();
 
-    console.log(smallImg)
-
     useEffect(() => {
         axiosClient.get('/genres')
         .then(({data}) => {

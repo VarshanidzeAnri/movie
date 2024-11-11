@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import screenfull from 'screenfull';
 import './videoPlayer.css'
 
-function VideoPlayer() {
+function VideoPlayer({video}) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMute, setIsMute] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -214,7 +214,7 @@ if (e.key === 'ArrowDown' && isFocused) {
           ref={playerRef}
           width="100%"
           height="100%"
-          url={movieSource[language][quality]}
+          url={video}
           playing={isPlaying}
           muted={isMute}
           volume={volume}
@@ -222,6 +222,7 @@ if (e.key === 'ArrowDown' && isFocused) {
           onDuration={setDuration}
           onEnded={handleEnded}
           controls={false}
+          
           
         />
       </div>

@@ -1,11 +1,16 @@
 import './checkListItem.css'
 
-
 function CheckListItem({data, onChacked, checked, type}) {
+    const isChecked = type === 'lang' 
+        ? checked.includes(data.shortname)
+        : checked.includes(data.id);
+
     return (
-        <div onClick={() => onChacked(type === 'lang' ? [...checked, data.shortname] : [...checked, data.id])} className="checkbox-wrapper-47 text-white">
-            <input type="checkbox" name={data.id} checked={data.isChecked} id={`${data.name}-${data.id}`} />
-            <label htmlFor={`${data.name}-${data.id}`}>{data.name}</label>
+        <div 
+            onClick={() => onChacked(type === 'lang' ? [...checked, data.shortname] : [...checked, data.id])} 
+            className={`filter-button ${isChecked ? 'selected' : ''}`}
+        >
+            {data.name}
         </div>
     )
 }

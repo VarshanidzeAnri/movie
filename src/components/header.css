@@ -19,3 +19,8 @@
 header {
   background: linear-gradient(to bottom, #19191b 0%, #000 100%);
 }
+
+.logo_full img, .logo_mobile img {
+  filter: drop-shadow(0 0 6px rgba(255,0,9,0.8));
+  -webkit-filter: drop-shadow(0 0 6px rgba(255,0,9,0.8));
+}

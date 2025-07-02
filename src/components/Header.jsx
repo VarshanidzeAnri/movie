@@ -39,9 +39,13 @@ function Header() {
       {/* <div className=""> */}
         {/* <div className="flex justify-between items-center w-[90%] mx-auto p-5  "> */}
 
-      <Link onClick={handleMoveTop} to='/'  className="logo_full"><img src={logo}  className="w-full h-full object-cover"/></Link>
+      <Link onClick={handleMoveTop} to='/' className="logo_full">
+        <img src={logo} className="w-full h-full object-cover"/>
+      </Link>
 
-      <Link onClick={handleMoveTop} to='/' className="logo_mobile w-24 h-10 "><img src={logo2}  className="w-full h-full object-cover"/></Link>
+      <Link onClick={handleMoveTop} to='/' className="logo_mobile w-24 h-10">
+        <img src={logo2} className="w-full h-full object-cover"/>
+      </Link>
         <div className="hidden lg:flex min-w-[25%] justify-between border-[#ff0009] border-2 py-5 px-1 rounded-2xl bg-black  ">
           <Link onClick={handleMoveTop} to='/' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/' && 'bg-[#ff0009] '}`}>მთავარი</Link>
           <Link onClick={handleMoveTop} to='/movies' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/movies' && 'bg-[#ff0009] '}`}>ფილმები</Link>

@@ -15,3 +15,7 @@
     display:block;
    }
  }
+
+header {
+  background: linear-gradient(to bottom, #19191b 0%, #000 100%);
+}

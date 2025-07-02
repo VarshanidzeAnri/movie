@@ -1,5 +1,5 @@
 import ReactPlayer from 'react-player';
-import movie from './../../public/movies/m1.mp4';
+// import movie from './../../public/movies/m1.mp4';
 import { Slider } from '@mui/material';
 import { FastForward, FastRewind, Fullscreen, Pause, PlayArrow, VolumeOff, VolumeUp } from '@mui/icons-material';
 import { useEffect, useRef, useState } from 'react';

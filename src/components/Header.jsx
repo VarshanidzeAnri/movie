@@ -46,11 +46,11 @@ function Header() {
       <Link onClick={handleMoveTop} to='/' className="logo_mobile w-24 h-10">
         <img src={logo2} className="w-full h-full object-cover"/>
       </Link>
-        <div className="hidden lg:flex min-w-[25%] justify-between border-[#ff0009] border-2 py-5 px-1 rounded-2xl bg-black  ">
-          <Link onClick={handleMoveTop} to='/' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/' && 'bg-[#ff0009] '}`}>მთავარი</Link>
-          <Link onClick={handleMoveTop} to='/movies' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/movies' && 'bg-[#ff0009] '}`}>ფილმები</Link>
-          <Link onClick={handleMoveTop} to='/serials' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/serials' && 'bg-[#ff0009] '}`}>სერიალები</Link>
-          <Link onClick={handleMoveTop} to='animes' className={`py-3 px-1 rounded-xl text-white font-bold ${pathname === '/animes' && 'bg-[#ff0009] '}`}>ანიმეები</Link>
+        <div className="hidden lg:flex items-center justify-center space-x-8 min-w-[25%]">
+          <Link onClick={handleMoveTop} to='/' className={`nav-link ${pathname === '/' && 'active'}`}>მთავარი</Link>
+          <Link onClick={handleMoveTop} to='/movies' className={`nav-link ${pathname === '/movies' && 'active'}`}>ფილმები</Link>
+          <Link onClick={handleMoveTop} to='/serials' className={`nav-link ${pathname === '/serials' && 'active'}`}>სერიალები</Link>
+          <Link onClick={handleMoveTop} to='animes' className={`nav-link ${pathname === '/animes' && 'active'}`}>ანიმეები</Link>
         </div>
         <div className="hidden lg:flex items-center justify-end gap-5 lg:w-[15vw] xl:w-[20vw]">
           <div className=" flex justify-start">

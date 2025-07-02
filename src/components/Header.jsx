@@ -33,59 +33,55 @@ function Header() {
   }
 
   return (
-    <header className=" bg-zinc-900 fixed top-0 w-full z-50">
-
+    <header className="fixed top-0 w-full z-50">
       <div className="flex justify-between items-center w-[90%] mx-auto p-5">
-      {/* <div className=""> */}
-        {/* <div className="flex justify-between items-center w-[90%] mx-auto p-5  "> */}
+        <Link onClick={handleMoveTop} to='/' className="logo_full">
+          <img src={logo} className="w-full h-full object-cover"/>
+        </Link>
 
-      <Link onClick={handleMoveTop} to='/' className="logo_full">
-        <img src={logo} className="w-full h-full object-cover"/>
-      </Link>
-
-      <Link onClick={handleMoveTop} to='/' className="logo_mobile w-24 h-10">
-        <img src={logo2} className="w-full h-full object-cover"/>
-      </Link>
+        <Link onClick={handleMoveTop} to='/' className="logo_mobile w-24 h-10">
+          <img src={logo2} className="w-full h-full object-cover"/>
+        </Link>
+        
         <div className="hidden lg:flex items-center justify-center space-x-8 min-w-[25%]">
           <Link onClick={handleMoveTop} to='/' className={`nav-link ${pathname === '/' && 'active'}`}>მთავარი</Link>
           <Link onClick={handleMoveTop} to='/movies' className={`nav-link ${pathname === '/movies' && 'active'}`}>ფილმები</Link>
           <Link onClick={handleMoveTop} to='/serials' className={`nav-link ${pathname === '/serials' && 'active'}`}>სერიალები</Link>
           <Link onClick={handleMoveTop} to='animes' className={`nav-link ${pathname === '/animes' && 'active'}`}>ანიმეები</Link>
         </div>
+        
         <div className="hidden lg:flex items-center justify-end gap-5 lg:w-[15vw] xl:w-[20vw]">
-          <div className=" flex justify-start">
-            <input className=" font-bold  bg-black text-white p-3 outline-none rounded-l-xl w-full " placeholder="ძებნა..." />
-            <button className="bg-black text-white rounded-r-xl px-2 font-black"><HiMagnifyingGlass /></button>
+          <div className="search-container flex justify-start">
+            <input className="search-input rounded-l-xl w-full" placeholder="ძებნა..." />
+            <button className="search-button rounded-r-xl font-bold"><HiMagnifyingGlass /></button>
           </div>
           <div className="relative">
-            <div onClick={() => setIsOpenUserIcon(is => !is)}  className="text-4xl text-[#ff0009] cursor-pointer"><HiOutlineUserCircle /></div>
-           {isOpenUserIcon && token  && (
-             <div className="absolute top-12 right-5 bg-black p-3 flex flex-col gap-2 w-40">
-              <Link to='/add' onClick={() => setIsOpenUserIcon(is => !is)} className="p-2 cursor-pointer hover:bg-zinc-900">დამატება</Link>
-              <Link to='/my/movies' onClick={() => setIsOpenUserIcon(is => !is)} className="p-2 cursor-pointer hover:bg-zinc-900">ჩემი ფილმები</Link>
-              <Link to='/private/movies' onClick={() => setIsOpenUserIcon(is => !is)} className="p-2 cursor-pointer hover:bg-zinc-900">დამალული ფილმები</Link>
-              <div  className="p-2 cursor-pointer hover:bg-zinc-900" onClick={logout}>გასვლა</div>
+            <div onClick={() => setIsOpenUserIcon(is => !is)} className="user-icon text-4xl"><HiOutlineUserCircle /></div>
+           {isOpenUserIcon && token && (
+             <div className="user-dropdown absolute top-12 right-5 p-1 flex flex-col gap-1 w-48">
+              <Link to='/add' onClick={() => setIsOpenUserIcon(is => !is)} className="cursor-pointer">დამატება</Link>
+              <Link to='/my/movies' onClick={() => setIsOpenUserIcon(is => !is)} className="cursor-pointer">ჩემი ფილმები</Link>
+              <Link to='/private/movies' onClick={() => setIsOpenUserIcon(is => !is)} className="cursor-pointer">დამალული ფილმები</Link>
+              <div className="cursor-pointer" onClick={logout}>გასვლა</div>
             </div>
            )}
 
            {isOpenUserIcon && !token && (
-            <div className="absolute top-12 right-5 bg-black p-3 flex flex-col gap-2 w-40">
-              <Link onClick={() => setIsOpenUserIcon(is => !is)} to='/login' className="p-2 cursor-pointer hover:bg-zinc-900">შესვლა</Link>
-              <Link onClick={() => setIsOpenUserIcon(is => !is)} to='/register' className="p-2 cursor-pointer hover:bg-zinc-900" >რეგისტრაცია</Link>
+            <div className="user-dropdown absolute top-12 right-5 p-1 flex flex-col gap-1 w-48">
+              <Link onClick={() => setIsOpenUserIcon(is => !is)} to='/login' className="cursor-pointer">შესვლა</Link>
+              <Link onClick={() => setIsOpenUserIcon(is => !is)} to='/register' className="cursor-pointer">რეგისტრაცია</Link>
             </div>
            )}
           </div>
         </div>
-        {/* </div> */}
-
 
         {/* mobile menu */}
         <div className="lg:hidden text-3xl">
-          <div onClick={() => setIsSidebarOpen(is => !is)} className="text-white">
+          <div onClick={() => setIsSidebarOpen(is => !is)} className="user-icon text-white">
             <HiBars3 />
           </div>
           {isSidebarOpen && (
-            <div className="absolute left-0 top-20 w-[100vw] h-[100vh] z-50 bg-black">
+            <div className="mobile-menu absolute left-0 top-20 w-[100vw] h-[100vh] z-50">
               <div className="flex flex-col  gap-5 my-10 ml-10 overflow-auto h-[70%]">
               <div className="flex justify-start ">
                     <input className="bg-white w-[70vw] p-2 outline-none rounded-l-xl text-black text-xl" placeholder="ძებნა..." />
@@ -151,3 +147,4 @@ function Header() {
 }
 
 export default Header
+

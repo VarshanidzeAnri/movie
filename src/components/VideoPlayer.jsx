@@ -127,11 +127,11 @@ if (e.key === 'ArrowDown' && isFocused) {
     setIsLanguagePopOpen(false);
   };
 
-  const movieSource = {
-    geo: { sd: movie, hd: 'm1_hd.mp4' },
-    eng: { sd: movie, hd: 'm1_hd.mp4' },
-    rus: { sd: movie, hd: 'm1_hd.mp4' },
-  };
+  // const movieSource = {
+  //   geo: { sd: movie, hd: 'm1_hd.mp4' },
+  //   eng: { sd: movie, hd: 'm1_hd.mp4' },
+  //   rus: { sd: movie, hd: 'm1_hd.mp4' },
+  // };
 
   const onProgress = ({ playedSeconds }) => {
     if (!seeking) setCurrentTime(playedSeconds);

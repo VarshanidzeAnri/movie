@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CheckList from "./CheckList";
 import { GENRES, LANGUAGES } from "../../data";
-import './mainFilter.css'
+import './mainFilter.css';
 
 function MainFilter() {
     const [checked, setChecked] = useState([]);
